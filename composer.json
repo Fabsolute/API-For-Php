@@ -1,0 +1,8 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Fabs\\Rest\\": "Fabs/Rest",
+      "Test\\App\\": "App"
+    }
+  }
+}
