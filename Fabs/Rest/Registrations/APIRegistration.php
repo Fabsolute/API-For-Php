@@ -1,12 +1,9 @@
 <?php
 
 
-namespace Fabs\Rest\Models;
+namespace Fabs\Rest\Registrations;
 
-
-use Fabs\Rest\APIBase;
-
-class APIRegistration extends RegistrationBase
+class APIRegistration extends MatchableRegistrationBase
 {
     /** @var string */
     public $route = null;

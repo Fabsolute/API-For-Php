@@ -2,7 +2,7 @@
 
 namespace Fabs\Rest;
 
-use Fabs\Rest\Models\ActionRegistration;
+use Fabs\Rest\Registrations\ActionRegistration;
 
 abstract class APIBase extends Injectable
 {

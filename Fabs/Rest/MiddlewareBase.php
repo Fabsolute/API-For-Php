@@ -6,9 +6,21 @@ namespace Fabs\Rest;
 
 abstract class MiddlewareBase extends Injectable
 {
-    public abstract function handle();
+    public function create()
+    {
+    }
 
-    public function finished()
+    public function before()
+    {
+        return true;
+    }
+
+    public function after($content)
+    {
+        return $content;
+    }
+
+    public function destroy()
     {
 
     }

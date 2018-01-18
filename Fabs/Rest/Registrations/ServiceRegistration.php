@@ -1,8 +1,8 @@
 <?php
 
-namespace Fabs\Rest\Models;
+namespace Fabs\Rest\Registrations;
 
-class ServiceRegistration
+class ServiceRegistration extends RegistrationBase
 {
     /** @var string */
     private $service_name = null;
@@ -10,8 +10,6 @@ class ServiceRegistration
     private $definition = null;
     /** @var bool */
     private $shared = false;
-    /** @var mixed */
-    private $shared_instance = null;
 
     /**
      * ServiceRegistration constructor.
@@ -72,29 +70,9 @@ class ServiceRegistration
     public function setDefinition($definition)
     {
         if ($this->definition != $definition) {
-            $this->shared_instance = null;
+            $this->setInstance(null);
         }
         $this->definition = $definition;
         return $this;
-    }
-
-    /**
-     * @param mixed $instance
-     * @return ServiceRegistration
-     * @author ahmetturk <ahmetturk93@gmail.com>
-     */
-    public function setSharedInstance($instance)
-    {
-        $this->shared_instance = $instance;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     * @author ahmetturk <ahmetturk93@gmail.com>
-     */
-    public function getSharedInstance()
-    {
-        return $this->shared_instance;
     }
 }

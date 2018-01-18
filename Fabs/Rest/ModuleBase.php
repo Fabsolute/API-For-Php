@@ -4,7 +4,7 @@
 namespace Fabs\Rest;
 
 
-use Fabs\Rest\Models\APIRegistration;
+use Fabs\Rest\Registrations\APIRegistration;
 
 abstract class ModuleBase extends Injectable
 {

@@ -4,9 +4,9 @@
 namespace Fabs\Rest;
 
 
-use Fabs\Rest\Models\ActionRegistration;
-use Fabs\Rest\Models\APIRegistration;
-use Fabs\Rest\Models\ModuleRegistration;
+use Fabs\Rest\Registrations\ActionRegistration;
+use Fabs\Rest\Registrations\APIRegistration;
+use Fabs\Rest\Registrations\ModuleRegistration;
 
 class Router extends Injectable
 {
@@ -35,6 +35,14 @@ class Router extends Injectable
                 return;
             }
         }
+    }
+
+    /**
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function initialize()
+    {
+        $this->execute();
     }
 
     /**
@@ -104,7 +112,7 @@ class Router extends Injectable
 
         /** @var ModuleBase $module_instance */
         $module_instance = new $module_registration->class_name($module_registration->extra_data);
-        $module_registration->instance = $module_instance;
+        $module_registration->setInstance($module_instance);
 
         $module_instance->initialize();
         $module_instance->registerServices($this->getDI());
@@ -130,7 +138,7 @@ class Router extends Injectable
 
         /** @var APIBase $api_instance */
         $api_instance = new $api_registration->class_name();
-        $api_registration->instance = $api_instance;
+        $api_registration->setInstance($api_instance);
 
         $api_instance->initialize();
         if (is_string($uri)) {

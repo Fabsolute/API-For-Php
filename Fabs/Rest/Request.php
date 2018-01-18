@@ -23,10 +23,11 @@ class Request extends Injectable
      */
     public function getURI()
     {
-        if (array_key_exists('_url', $_GET)) {
-            return $_GET['_url'];
+        if ($this->_GET !== null) {
+            if (array_key_exists('_url', $this->_GET)) {
+                return $this->_GET['_url'];
+            }
         }
-
         return '/';
     }
 }

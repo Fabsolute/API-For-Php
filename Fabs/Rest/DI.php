@@ -4,7 +4,7 @@
 namespace Fabs\Rest;
 
 
-use Fabs\Rest\Models\ServiceRegistration;
+use Fabs\Rest\Registrations\ServiceRegistration;
 
 class DI implements \ArrayAccess
 {
@@ -89,8 +89,8 @@ class DI implements \ArrayAccess
     private function resolve($service)
     {
         if ($service->isShared()) {
-            if ($service->getSharedInstance() !== null) {
-                return $service->getSharedInstance();
+            if ($service->getInstance() !== null) {
+                return $service->getInstance();
             }
         }
 
@@ -110,7 +110,7 @@ class DI implements \ArrayAccess
         }
 
         if ($service->isShared()) {
-            $service->setSharedInstance($instance);
+            $service->setInstance($instance);
         }
 
         if ($instance instanceof Injectable) {

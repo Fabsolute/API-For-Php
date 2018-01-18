@@ -4,28 +4,42 @@
 namespace Fabs\Rest;
 
 
-use Fabs\Rest\Models\KernelRegistration;
+use Fabs\Rest\Registrations\KernelRegistration;
 
-abstract class Application extends Injectable
+class Application extends Injectable
 {
-    /** @var KernelBase[] */
-    public $kernel_registration_list = [];
+    /** @var KernelRegistration[] */
+    private $kernel_registration_list = [];
 
-    protected abstract function initialize();
+    public function __construct($kernel = null, $type = null)
+    {
+        if ($kernel !== null) {
+            $this->registerKernel($type, $kernel);
+        }
+    }
+
+    protected function initialize()
+    {
+    }
 
     public function run()
     {
         $this->initialize();
-
-        $this->kernel_registration_list[0]->run();
+        $this->request->initialize();
+        $this->router->initialize();
     }
 
     protected function registerKernel($type, $class_name)
     {
-        $module_registration = new KernelRegistration();
-        $module_registration->type = $type;
-        $module_registration->class_name = $class_name;
-        $this->kernel_registration_list[] = $module_registration;
-        return $module_registration;
+        $kernel_registration = new KernelRegistration();
+        $kernel_registration->type = $type;
+        $kernel_registration->class_name = $class_name;
+        $this->kernel_registration_list[] = $kernel_registration;
+        return $kernel_registration;
+    }
+
+    public function getKernelRegistrationList()
+    {
+        return $this->kernel_registration_list;
     }
 }

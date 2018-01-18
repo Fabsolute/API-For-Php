@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Fabs\Rest\Models;
+namespace Fabs\Rest\Registrations;
 
 
-class KernelRegistration extends RegistrationBase
+class KernelRegistration extends MatchableRegistrationBase
 {
     /** @var string */
     public $type = null;

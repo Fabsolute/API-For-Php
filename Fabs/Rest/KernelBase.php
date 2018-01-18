@@ -5,7 +5,7 @@ namespace Fabs\Rest;
 
 
 use Fabs\Rest\DI\FactoryDefault;
-use Fabs\Rest\Models\ModuleRegistration;
+use Fabs\Rest\Registrations\ModuleRegistration;
 
 abstract class KernelBase extends Injectable
 {
@@ -49,16 +49,13 @@ abstract class KernelBase extends Injectable
      */
     public function run()
     {
-        $this->request->initialize();
-
         $this->initialize();
-
+        $this->request->initialize();
         $this->router->execute();
-
 
         echo call_user_func_array(
             [
-                $this->router->getMatchedAPIRegistration()->instance,
+                $this->router->getMatchedAPIRegistration()->getInstance(),
                 $this->router->getMatchedActionRegistration()->function_name
             ],
             $this->router->getMatchedActionRegistration()->parameters
