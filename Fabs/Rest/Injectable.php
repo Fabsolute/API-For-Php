@@ -2,14 +2,17 @@
 
 
 namespace Fabs\Rest;
+use Fabs\Rest\Http\Request;
+use Fabs\Rest\Http\Response;
 
 /**
  * Class Injectable
  * @package Fabs\Rest
  *
- * @property KernelBase application
+ * @property Application application
  * @property Router router
  * @property Request request
+ * @property Response response
  */
 class Injectable
 {

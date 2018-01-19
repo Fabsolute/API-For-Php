@@ -6,6 +6,7 @@ namespace Fabs\Rest;
 
 use Fabs\Rest\Registrations\ActionRegistration;
 use Fabs\Rest\Registrations\APIRegistration;
+use Fabs\Rest\Registrations\KernelRegistration;
 use Fabs\Rest\Registrations\ModuleRegistration;
 
 class Router extends Injectable
@@ -16,6 +17,8 @@ class Router extends Injectable
     private $matched_api_registration = null;
     /** @var ActionRegistration */
     private $matched_action_registration = null;
+    /** @var KernelRegistration */
+    private $matched_kernel_registration = null;
 
     /**
      * @param string $uri
@@ -27,7 +30,32 @@ class Router extends Injectable
             $uri = $this->request->getURI();
         }
 
-        $module_registration_list = $this->application->getModuleRegistrationList();
+        $kernel_registration_list = $this->application->getKernelRegistrationList();
+        foreach ($kernel_registration_list as $kernel_registration) {
+            if (
+                (PHP_SAPI === 'cli' && $kernel_registration->type === PHP_SAPI) ||
+                (PHP_SAPI !== 'cli' && $kernel_registration->type !== 'cli')
+            ) {
+                $this->kernelMatched($kernel_registration, $uri);
+                return;
+            }
+        }
+    }
+
+    /**
+     * @param KernelRegistration $kernel_registration
+     * @param string $uri
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function kernelMatched($kernel_registration, $uri)
+    {
+        $this->matched_kernel_registration = $kernel_registration;
+
+        /** @var KernelBase $kernel_instance */
+        $kernel_instance = $kernel_registration->getInstance();
+        $kernel_instance->initialize();
+
+        $module_registration_list = $kernel_instance->getModuleRegistrationList();
         foreach ($module_registration_list as $module_registration) {
             $new_uri = $this->match($module_registration->route, $uri);
             if ($new_uri !== false) {
@@ -73,6 +101,15 @@ class Router extends Injectable
     }
 
     /**
+     * @return KernelRegistration
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function getMatchedKernelRegistration()
+    {
+        return $this->matched_kernel_registration;
+    }
+
+    /**
      * @param string $route
      * @param string $uri
      * @return bool|string
@@ -111,8 +148,7 @@ class Router extends Injectable
         $this->matched_module_registration = $module_registration;
 
         /** @var ModuleBase $module_instance */
-        $module_instance = new $module_registration->class_name($module_registration->extra_data);
-        $module_registration->setInstance($module_instance);
+        $module_instance = $module_registration->getInstance();
 
         $module_instance->initialize();
         $module_instance->registerServices($this->getDI());
@@ -137,8 +173,7 @@ class Router extends Injectable
         $this->matched_api_registration = $api_registration;
 
         /** @var APIBase $api_instance */
-        $api_instance = new $api_registration->class_name();
-        $api_registration->setInstance($api_instance);
+        $api_instance = $api_registration->getInstance();
 
         $api_instance->initialize();
         if (is_string($uri)) {

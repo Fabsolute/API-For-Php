@@ -3,40 +3,33 @@
 
 namespace Fabs\Rest\Registrations;
 
-
 use Fabs\Rest\MiddlewareBase;
 
-abstract class MiddlewareRegistrationBase extends RegistrationBase
+abstract class MiddlewareDefinitionBase extends DefinitionBase
 {
-    /** @var string[] */
-    private $middleware_list = [];
+    /** @var mixed[] */
+    private $middleware_definition_list = [];
 
     /** @var MiddlewareBase[] */
     private $middleware_instance_list = [];
 
     /**
      * @param string $middleware
+     * @param mixed[] $parameters
      * @return static
      */
-    public function addMiddleware($middleware)
+    public function addMiddleware($middleware, ...$parameters)
     {
-        $this->middleware_list[] = $middleware;
+        $this->middleware_definition_list[] = ['middleware' => $middleware, 'parameters' => $parameters];
         return $this;
     }
 
-    /**
-     * @return string[]
-     * @author ahmetturk <ahmetturk93@gmail.com>
-     */
-    public function getMiddlewareList()
+    public function executeInitialize()
     {
-        return $this->middleware_list;
-    }
+        $this->initializeMiddlewareList();
 
-    public function executeCreate()
-    {
         foreach ($this->middleware_instance_list as $middleware_instance) {
-            $middleware_instance->create();
+            $middleware_instance->initialize();
         }
     }
 
@@ -60,19 +53,22 @@ abstract class MiddlewareRegistrationBase extends RegistrationBase
         return $content;
     }
 
-    public function executeDestroy()
+    public function executeFinalize()
     {
         foreach ($this->middleware_instance_list as $middleware_instance) {
-            $middleware_instance->destroy();
+
+            $middleware_instance->finalize();
         }
     }
 
     public function initializeMiddlewareList()
     {
-        if (count($this->middleware_list) > 0 && count($this->middleware_instance_list) === 0) {
-            foreach ($this->middleware_list as $middleware_name) {
-                $instance = new $middleware_name();
-                $middleware_instance_list[] = $instance;
+        if (count($this->middleware_definition_list) > 0 && count($this->middleware_instance_list) === 0) {
+            foreach ($this->middleware_definition_list as $middleware_definition) {
+                $middleware_name = $middleware_definition['middleware'];
+                $middleware_parameters = $middleware_definition['parameters'];
+                $instance = new $middleware_name(...$middleware_parameters);
+                $this->middleware_instance_list[] = $instance;
             }
         }
     }

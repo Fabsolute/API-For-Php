@@ -4,14 +4,14 @@
 namespace Fabs\Rest;
 
 
-use Fabs\Rest\Registrations\ServiceRegistration;
+use Fabs\Rest\Registrations\ServiceDefinition;
 
 class DI implements \ArrayAccess
 {
     /** @var DI */
     private static $default_dependency_injector = null;
     /**
-     * @var ServiceRegistration[]
+     * @var ServiceDefinition[]
      */
     protected $service_lookup = [];
 
@@ -41,19 +41,19 @@ class DI implements \ArrayAccess
      * @param string $service_name
      * @param string|callable|mixed $definition
      * @param bool $shared
-     * @return ServiceRegistration
+     * @return ServiceDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
     public function set($service_name, $definition, $shared = false)
     {
-        $service_registration = new ServiceRegistration($service_name, $definition, $shared);
+        $service_registration = new ServiceDefinition($service_name, $definition, $shared);
         $this->service_lookup[$service_name] = $service_registration;
         return $service_registration;
     }
 
     /**
      * @param string $service_name
-     * @return ServiceRegistration
+     * @return ServiceDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
     public function getService($service_name)
@@ -82,36 +82,13 @@ class DI implements \ArrayAccess
     }
 
     /**
-     * @param ServiceRegistration $service
+     * @param ServiceDefinition $service
      * @return mixed|null
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
     private function resolve($service)
     {
-        if ($service->isShared()) {
-            if ($service->getInstance() !== null) {
-                return $service->getInstance();
-            }
-        }
-
-        $instance = null;
-        $definition = $service->getDefinition();
-
-        if (is_string($definition)) {
-            if (class_exists($definition)) {
-                $instance = new $definition;
-            }
-        } else {
-            if (is_callable($definition)) {
-                $instance = call_user_func($definition);
-            } else {
-                $instance = $definition;
-            }
-        }
-
-        if ($service->isShared()) {
-            $service->setInstance($instance);
-        }
+        $instance = $service->getInstance();
 
         if ($instance instanceof Injectable) {
             $instance->setDI($this);

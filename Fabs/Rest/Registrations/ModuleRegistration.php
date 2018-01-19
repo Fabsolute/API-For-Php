@@ -10,4 +10,16 @@ class ModuleRegistration extends MatchableRegistrationBase
     public $class_name = null;
     /** @var mixed|null */
     public $extra_data = null;
+
+    public function getInstance()
+    {
+        $instance = parent::getInstance();
+
+        if ($instance === null) {
+            $instance = new $this->class_name($this->extra_data);
+            $this->setInstance($instance);
+        }
+
+        return $instance;
+    }
 }

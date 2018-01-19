@@ -3,7 +3,7 @@
 
 namespace Fabs\Rest\Registrations;
 
-abstract class MatchableRegistrationBase extends MiddlewareRegistrationBase
+abstract class MatchableRegistrationBase extends MiddlewareDefinitionBase
 {
     private $is_default = false;
 

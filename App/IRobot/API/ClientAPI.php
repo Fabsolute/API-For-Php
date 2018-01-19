@@ -3,16 +3,18 @@
 namespace Test\App\IRobot\API;
 
 use Fabs\Rest\APIBase;
+use Test\App\IRobot\Middleware\LoggerMiddleware;
 
 class ClientAPI extends APIBase
 {
     public function initialize()
     {
-        $this->registerAction('GET', '/ruh/{cus}/{yuh}', 'oha');
+        $this->registerAction('POST', '/ruh/{cus}/{yuh}', 'oha')
+            ->addMiddleware(LoggerMiddleware::class,'action');
     }
 
     public function oha($cus, $yuh)
     {
-        return 'wtf - ' . $cus . ' - ' . $yuh ;
+        return 'wtf - ' . $cus . ' - ' . $yuh;
     }
 }

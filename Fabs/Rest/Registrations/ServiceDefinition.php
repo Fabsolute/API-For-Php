@@ -2,7 +2,7 @@
 
 namespace Fabs\Rest\Registrations;
 
-class ServiceRegistration extends RegistrationBase
+class ServiceDefinition extends DefinitionBase
 {
     /** @var string */
     private $service_name = null;
@@ -53,7 +53,7 @@ class ServiceRegistration extends RegistrationBase
 
     /**
      * @param bool $is_shared
-     * @return ServiceRegistration
+     * @return ServiceDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
     public function setShared($is_shared)
@@ -64,7 +64,7 @@ class ServiceRegistration extends RegistrationBase
 
     /**
      * @param string|callable|mixed $definition
-     * @return ServiceRegistration
+     * @return ServiceDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
     public function setDefinition($definition)
@@ -74,5 +74,36 @@ class ServiceRegistration extends RegistrationBase
         }
         $this->definition = $definition;
         return $this;
+    }
+
+    public function getInstance()
+    {
+        $instance = parent::getInstance();
+
+        if ($this->isShared()) {
+            if ($instance !== null) {
+                return $instance;
+            }
+        }
+
+        $definition = $this->getDefinition();
+
+        if (is_string($definition)) {
+            if (class_exists($definition)) {
+                $instance = new $definition;
+            }
+        } else {
+            if (is_callable($definition)) {
+                $instance = call_user_func($definition);
+            } else {
+                $instance = $definition;
+            }
+        }
+
+        if ($this->isShared()) {
+            $this->setInstance($instance);
+        }
+
+        return $instance;
     }
 }

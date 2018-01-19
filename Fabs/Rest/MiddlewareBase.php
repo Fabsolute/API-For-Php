@@ -6,7 +6,7 @@ namespace Fabs\Rest;
 
 abstract class MiddlewareBase extends Injectable
 {
-    public function create()
+    public function initialize()
     {
     }
 
@@ -20,7 +20,7 @@ abstract class MiddlewareBase extends Injectable
         return $content;
     }
 
-    public function destroy()
+    public function finalize()
     {
 
     }

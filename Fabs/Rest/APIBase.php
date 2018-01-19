@@ -22,7 +22,9 @@ abstract class APIBase extends Injectable
         $action_registration->method = $method;
         $action_registration->route = $route;
         $action_registration->function_name = $function_name;
-        $this->action_registration_list[] = $action_registration;
+        if ($this->request->isMethod($method)) {
+            $this->action_registration_list[] = $action_registration;
+        }
         return $action_registration;
     }
 

@@ -4,7 +4,7 @@
 namespace Fabs\Rest\Registrations;
 
 
-abstract class RegistrationBase
+abstract class DefinitionBase
 {
     /** @var mixed */
     private $instance = null;
