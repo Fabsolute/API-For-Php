@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Fabs\Rest\Registrations;
+namespace Fabs\Rest\Definitions;
 
-abstract class MatchableRegistrationBase extends MiddlewareDefinitionBase
+abstract class MatchableDefinitionBase extends MiddlewareDefinitionBase
 {
     private $is_default = false;
 

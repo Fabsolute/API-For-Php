@@ -3,9 +3,6 @@
 
 namespace Fabs\Rest\Utilities;
 
-
-use Fabs\Rest\Http\Request\Headers;
-
 class Dictionary
 {
     /**

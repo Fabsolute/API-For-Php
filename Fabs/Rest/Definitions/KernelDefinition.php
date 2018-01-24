@@ -1,10 +1,12 @@
 <?php
 
 
-namespace Fabs\Rest\Registrations;
+namespace Fabs\Rest\Definitions;
 
 
-class KernelRegistration extends MatchableRegistrationBase
+use Fabs\Rest\InjectableWithDefinition;
+
+class KernelDefinition extends MatchableDefinitionBase
 {
     /** @var string */
     public $type = null;
@@ -16,7 +18,11 @@ class KernelRegistration extends MatchableRegistrationBase
         $instance = parent::getInstance();
 
         if ($instance === null) {
+
+            /** @var InjectableWithDefinition $instance */
             $instance = new $this->class_name;
+            $instance->setDefinition($this);
+
             $this->setInstance($instance);
         }
 

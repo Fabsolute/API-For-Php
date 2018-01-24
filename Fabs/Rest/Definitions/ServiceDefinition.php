@@ -1,6 +1,6 @@
 <?php
 
-namespace Fabs\Rest\Registrations;
+namespace Fabs\Rest\Definitions;
 
 class ServiceDefinition extends DefinitionBase
 {
@@ -12,7 +12,7 @@ class ServiceDefinition extends DefinitionBase
     private $shared = false;
 
     /**
-     * ServiceRegistration constructor.
+     * ServiceDefinition constructor.
      * @param string $service_name
      * @param string|callable|mixed $definition
      * @param bool $shared

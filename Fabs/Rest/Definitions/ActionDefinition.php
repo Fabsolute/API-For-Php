@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Fabs\Rest\Registrations;
+namespace Fabs\Rest\Definitions;
 
 
-class ActionRegistration extends MatchableRegistrationBase
+class ActionDefinition extends MatchableDefinitionBase
 {
     /** @var string */
     public $method = null;

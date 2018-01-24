@@ -1,8 +1,10 @@
 <?php
 
-namespace Fabs\Rest\Registrations;
+namespace Fabs\Rest\Definitions;
 
-class ModuleRegistration extends MatchableRegistrationBase
+use Fabs\Rest\InjectableWithDefinition;
+
+class ModuleDefinition extends MatchableDefinitionBase
 {
     /** @var string */
     public $route = null;
@@ -16,7 +18,11 @@ class ModuleRegistration extends MatchableRegistrationBase
         $instance = parent::getInstance();
 
         if ($instance === null) {
+
+            /** @var InjectableWithDefinition $instance */
             $instance = new $this->class_name($this->extra_data);
+            $instance->setDefinition($this);
+
             $this->setInstance($instance);
         }
 

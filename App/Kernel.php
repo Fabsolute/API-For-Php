@@ -8,9 +8,9 @@ use Test\App\IRobot\IRobotModule;
 
 class Kernel extends KernelBase
 {
-    public function initialize()
+    public function initializeKernel()
     {
-        $this->registerModule('/irobot', IRobotModule::class);
+        $this->defineModule('/irobot', IRobotModule::class);
     }
 }
 

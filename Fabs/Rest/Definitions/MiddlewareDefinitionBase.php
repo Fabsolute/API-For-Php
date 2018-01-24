@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Fabs\Rest\Registrations;
+namespace Fabs\Rest\Definitions;
 
 use Fabs\Rest\MiddlewareBase;
 
@@ -36,21 +36,15 @@ abstract class MiddlewareDefinitionBase extends DefinitionBase
     public function executeBefore()
     {
         foreach ($this->middleware_instance_list as $middleware_instance) {
-            if ($middleware_instance->before() !== true) {
-                return false;
-            }
+            $middleware_instance->before();
         }
-
-        return true;
     }
 
-    public function executeAfter($content)
+    public function executeAfter()
     {
         foreach ($this->middleware_instance_list as $middleware_instance) {
-            $content = $middleware_instance->after($content);
+            $middleware_instance->after();
         }
-
-        return $content;
     }
 
     public function executeFinalize()

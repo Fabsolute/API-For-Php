@@ -4,21 +4,21 @@
 namespace Fabs\Rest;
 
 
-use Fabs\Rest\Registrations\ActionRegistration;
-use Fabs\Rest\Registrations\APIRegistration;
-use Fabs\Rest\Registrations\KernelRegistration;
-use Fabs\Rest\Registrations\ModuleRegistration;
+use Fabs\Rest\Definitions\ActionDefinition;
+use Fabs\Rest\Definitions\APIDefinition;
+use Fabs\Rest\Definitions\KernelDefinition;
+use Fabs\Rest\Definitions\ModuleDefinition;
 
 class Router extends Injectable
 {
-    /** @var ModuleRegistration */
-    private $matched_module_registration = null;
-    /** @var APIRegistration */
-    private $matched_api_registration = null;
-    /** @var ActionRegistration */
-    private $matched_action_registration = null;
-    /** @var KernelRegistration */
-    private $matched_kernel_registration = null;
+    /** @var ModuleDefinition */
+    private $matched_module_definition = null;
+    /** @var APIDefinition */
+    private $matched_api_definition = null;
+    /** @var ActionDefinition */
+    private $matched_action_definition = null;
+    /** @var KernelDefinition */
+    private $matched_kernel_definition = null;
 
     /**
      * @param string $uri
@@ -30,36 +30,36 @@ class Router extends Injectable
             $uri = $this->request->getURI();
         }
 
-        $kernel_registration_list = $this->application->getKernelRegistrationList();
-        foreach ($kernel_registration_list as $kernel_registration) {
+        $kernel_definition_list = $this->application->getKernelDefinitionList();
+        foreach ($kernel_definition_list as $kernel_definition) {
             if (
-                (PHP_SAPI === 'cli' && $kernel_registration->type === PHP_SAPI) ||
-                (PHP_SAPI !== 'cli' && $kernel_registration->type !== 'cli')
+                (PHP_SAPI === 'cli' && $kernel_definition->type === PHP_SAPI) ||
+                (PHP_SAPI !== 'cli' && $kernel_definition->type !== 'cli')
             ) {
-                $this->kernelMatched($kernel_registration, $uri);
+                $this->kernelMatched($kernel_definition, $uri);
                 return;
             }
         }
     }
 
     /**
-     * @param KernelRegistration $kernel_registration
+     * @param KernelDefinition $kernel_definition
      * @param string $uri
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    public function kernelMatched($kernel_registration, $uri)
+    public function kernelMatched($kernel_definition, $uri)
     {
-        $this->matched_kernel_registration = $kernel_registration;
+        $this->matched_kernel_definition = $kernel_definition;
 
         /** @var KernelBase $kernel_instance */
-        $kernel_instance = $kernel_registration->getInstance();
+        $kernel_instance = $kernel_definition->getInstance();
         $kernel_instance->initialize();
 
-        $module_registration_list = $kernel_instance->getModuleRegistrationList();
-        foreach ($module_registration_list as $module_registration) {
-            $new_uri = $this->match($module_registration->route, $uri);
+        $module_definition_list = $kernel_instance->getModuleDefinitionList();
+        foreach ($module_definition_list as $module_definition) {
+            $new_uri = $this->match($module_definition->route, $uri);
             if ($new_uri !== false) {
-                $this->moduleMatched($module_registration, $new_uri);
+                $this->moduleMatched($module_definition, $new_uri);
                 return;
             }
         }
@@ -74,39 +74,39 @@ class Router extends Injectable
     }
 
     /**
-     * @return ModuleRegistration
+     * @return ModuleDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    public function getMatchedModuleRegistration()
+    public function getMatchedModuleDefinition()
     {
-        return $this->matched_module_registration;
+        return $this->matched_module_definition;
     }
 
     /**
-     * @return APIRegistration
+     * @return APIDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    public function getMatchedAPIRegistration()
+    public function getMatchedAPIDefinition()
     {
-        return $this->matched_api_registration;
+        return $this->matched_api_definition;
     }
 
     /**
-     * @return ActionRegistration
+     * @return ActionDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    public function getMatchedActionRegistration()
+    public function getMatchedActionDefinition()
     {
-        return $this->matched_action_registration;
+        return $this->matched_action_definition;
     }
 
     /**
-     * @return KernelRegistration
+     * @return KernelDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    public function getMatchedKernelRegistration()
+    public function getMatchedKernelDefinition()
     {
-        return $this->matched_kernel_registration;
+        return $this->matched_kernel_definition;
     }
 
     /**
@@ -139,63 +139,63 @@ class Router extends Injectable
     }
 
     /**
-     * @param ModuleRegistration $module_registration
+     * @param ModuleDefinition $module_definition
      * @param string|bool $uri
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    private function moduleMatched($module_registration, $uri)
+    private function moduleMatched($module_definition, $uri)
     {
-        $this->matched_module_registration = $module_registration;
+        $this->matched_module_definition = $module_definition;
 
         /** @var ModuleBase $module_instance */
-        $module_instance = $module_registration->getInstance();
+        $module_instance = $module_definition->getInstance();
 
         $module_instance->initialize();
-        $module_instance->registerServices($this->getDI());
+        $module_instance->defineServices($this->getDI());
         if (is_string($uri)) {
-            $api_registration_list = $module_instance->getAPIRegistrationList();
-            foreach ($api_registration_list as $api_registration) {
-                $new_uri = $this->match($api_registration->route, $uri);
+            $api_definition_list = $module_instance->getAPIDefinitionList();
+            foreach ($api_definition_list as $api_definition) {
+                $new_uri = $this->match($api_definition->route, $uri);
                 if ($new_uri !== false) {
-                    $this->apiMatched($api_registration, $new_uri);
+                    $this->apiMatched($api_definition, $new_uri);
                 }
             }
         }
     }
 
     /**
-     * @param APIRegistration $api_registration
+     * @param APIDefinition $api_definition
      * @param string|bool $uri
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    private function apiMatched($api_registration, $uri)
+    private function apiMatched($api_definition, $uri)
     {
-        $this->matched_api_registration = $api_registration;
+        $this->matched_api_definition = $api_definition;
 
         /** @var APIBase $api_instance */
-        $api_instance = $api_registration->getInstance();
+        $api_instance = $api_definition->getInstance();
 
         $api_instance->initialize();
         if (is_string($uri)) {
-            $action_registration_list = $api_instance->getActionRegistrationList();
-            foreach ($action_registration_list as $action_registration) {
-                $new_uri = $this->match($action_registration->getCompiledRoute(), $uri);
+            $action_definition_list = $api_instance->getActionDefinitionList();
+            foreach ($action_definition_list as $action_definition) {
+                $new_uri = $this->match($action_definition->getCompiledRoute(), $uri);
                 if ($new_uri !== false) {
-                    $this->actionMatched($action_registration, $new_uri);
+                    $this->actionMatched($action_definition, $new_uri);
                 }
             }
         }
     }
 
     /**
-     * @param ActionRegistration $action_registration
+     * @param ActionDefinition $action_definition
      * @param string|bool|array $uri
      */
-    private function actionMatched($action_registration, $uri)
+    private function actionMatched($action_definition, $uri)
     {
-        $this->matched_action_registration = $action_registration;
+        $this->matched_action_definition = $action_definition;
         if (is_array($uri)) {
-            $this->matched_action_registration->parameters = $uri;
+            $this->matched_action_definition->parameters = $uri;
         }
     }
 }

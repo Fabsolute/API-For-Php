@@ -14,7 +14,7 @@ use Fabs\Rest\Http\Response;
  * @property Request request
  * @property Response response
  */
-class Injectable
+abstract class Injectable
 {
     /**
      * @var DI

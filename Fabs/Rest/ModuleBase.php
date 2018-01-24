@@ -4,12 +4,12 @@
 namespace Fabs\Rest;
 
 
-use Fabs\Rest\Registrations\APIRegistration;
+use Fabs\Rest\Definitions\APIDefinition;
 
-abstract class ModuleBase extends Injectable
+abstract class ModuleBase extends InjectableWithDefinition
 {
-    /** @var APIRegistration[] */
-    private $api_registration_list = [];
+    /** @var APIDefinition[] */
+    private $api_definition_list = [];
 
     /**
      * ModuleBase constructor.
@@ -20,26 +20,26 @@ abstract class ModuleBase extends Injectable
     }
 
     /**
-     * @return APIRegistration[]
+     * @return APIDefinition[]
      */
-    public function getAPIRegistrationList()
+    public function getAPIDefinitionList()
     {
-        return $this->api_registration_list;
+        return $this->api_definition_list;
     }
 
     /**
      * @param string $route
      * @param string $class_name
-     * @return APIRegistration
+     * @return APIDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    protected function registerAPI($route, $class_name)
+    protected function defineAPI($route, $class_name)
     {
-        $api_registration = new APIRegistration();
-        $api_registration->route = $route;
-        $api_registration->class_name = $class_name;
-        $this->api_registration_list[] = $api_registration;
-        return $api_registration;
+        $api_definition = new APIDefinition();
+        $api_definition->route = $route;
+        $api_definition->class_name = $class_name;
+        $this->api_definition_list[] = $api_definition;
+        return $api_definition;
     }
 
     /**
@@ -51,5 +51,5 @@ abstract class ModuleBase extends Injectable
      * @param $dependency_injector DI
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    public abstract function registerServices($dependency_injector);
+    public abstract function defineServices($dependency_injector);
 }

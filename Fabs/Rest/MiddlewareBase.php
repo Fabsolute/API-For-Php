@@ -12,12 +12,10 @@ abstract class MiddlewareBase extends Injectable
 
     public function before()
     {
-        return true;
     }
 
-    public function after($content)
+    public function after()
     {
-        return $content;
     }
 
     public function finalize()

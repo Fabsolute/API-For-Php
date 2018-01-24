@@ -4,5 +4,8 @@
       "Fabs\\Rest\\": "Fabs/Rest",
       "Test\\App\\": "App"
     }
+  },
+  "require": {
+    "fabs/serialize": "dev-develop"
   }
 }

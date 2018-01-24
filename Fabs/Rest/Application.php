@@ -6,12 +6,12 @@ namespace Fabs\Rest;
 
 use Fabs\Rest\DI\FactoryDefault;
 use Fabs\Rest\Exceptions\NotFoundException;
-use Fabs\Rest\Registrations\KernelRegistration;
+use Fabs\Rest\Definitions\KernelDefinition;
 
 class Application extends Injectable
 {
-    /** @var KernelRegistration[] */
-    private $kernel_registration_list = [];
+    /** @var KernelDefinition[] */
+    private $kernel_definition_list = [];
 
     /**
      * Application constructor.
@@ -34,7 +34,7 @@ class Application extends Injectable
     public function run($kernel = null, $type = null)
     {
         if ($kernel !== null) {
-            $this->registerKernel($type, $kernel);
+            $this->defineKernel($type, $kernel);
         }
 
         $this->initialize();
@@ -45,71 +45,72 @@ class Application extends Injectable
         $this->execute();
     }
 
-    protected function registerKernel($type, $class_name)
+    protected function defineKernel($type, $class_name)
     {
-        $kernel_registration = new KernelRegistration();
-        $kernel_registration->type = $type;
-        $kernel_registration->class_name = $class_name;
-        $this->kernel_registration_list[] = $kernel_registration;
-        return $kernel_registration;
+        $kernel_definition = new KernelDefinition();
+        $kernel_definition->type = $type;
+        $kernel_definition->class_name = $class_name;
+        $this->kernel_definition_list[] = $kernel_definition;
+        return $kernel_definition;
     }
 
-    public function getKernelRegistrationList()
+    public function getKernelDefinitionList()
     {
-        return $this->kernel_registration_list;
+        return $this->kernel_definition_list;
     }
 
     private function execute()
     {
-        $kernel_registration = $this->router->getMatchedKernelRegistration();
-        $module_registration = $this->router->getMatchedModuleRegistration();
-        $api_registration = $this->router->getMatchedAPIRegistration();
-        $action_registration = $this->router->getMatchedActionRegistration();
+        $kernel_definition = $this->router->getMatchedKernelDefinition();
+        $module_definition = $this->router->getMatchedModuleDefinition();
+        $api_definition = $this->router->getMatchedAPIDefinition();
+        $action_definition = $this->router->getMatchedActionDefinition();
 
-        if ($kernel_registration === null ||
-            $module_registration === null ||
-            $api_registration === null ||
-            $action_registration === null ||
+        if ($kernel_definition === null ||
+            $module_definition === null ||
+            $api_definition === null ||
+            $action_definition === null ||
             !is_callable([
-                $api_registration->getInstance(),
-                $action_registration->function_name
+                $api_definition->getInstance(),
+                $action_definition->function_name
             ])) {
             throw new NotFoundException();
         }
 
         // create
-        $kernel_registration->executeInitialize();
-        $module_registration->executeInitialize();
-        $api_registration->executeInitialize();
-        $action_registration->executeInitialize();
+        $kernel_definition->executeInitialize();
+        $module_definition->executeInitialize();
+        $api_definition->executeInitialize();
+        $action_definition->executeInitialize();
 
         // before
-        $kernel_registration->executeBefore();
-        $module_registration->executeBefore();
-        $api_registration->executeBefore();
-        $action_registration->executeBefore();
+        $kernel_definition->executeBefore();
+        $module_definition->executeBefore();
+        $api_definition->executeBefore();
+        $action_definition->executeBefore();
 
         // execution
         $returned_value = call_user_func_array(
             [
-                $api_registration->getInstance(),
-                $action_registration->function_name
+                $api_definition->getInstance(),
+                $action_definition->function_name
             ],
-            $action_registration->parameters
+            $action_definition->parameters
         );
 
-        // after
-        $returned_value = $action_registration->executeAfter($returned_value);
-        $returned_value = $api_registration->executeAfter($returned_value);
-        $returned_value = $module_registration->executeAfter($returned_value);
-        $returned_value = $kernel_registration->executeAfter($returned_value);
         $this->response->setReturnedValue($returned_value);
+
+        // after
+        $action_definition->executeAfter();
+        $api_definition->executeAfter();
+        $module_definition->executeAfter();
+        $kernel_definition->executeAfter();
 
 
         // destroy
-        $action_registration->executeFinalize();
-        $api_registration->executeFinalize();
-        $module_registration->executeFinalize();
-        $kernel_registration->executeFinalize();
+        $action_definition->executeFinalize();
+        $api_definition->executeFinalize();
+        $module_definition->executeFinalize();
+        $kernel_definition->executeFinalize();
     }
 }

@@ -12,14 +12,13 @@ class IRobotModule extends ModuleBase
 {
     public function initialize()
     {
-        $this->registerAPI('/yuh', ClientAPI::class)
-            ->addMiddleware(LoggerMiddleware::class, 'api');
+        $this->defineAPI('/yuh', ClientAPI::class);
     }
 
     /**
      * @param $dependency_injector DI
      */
-    public function registerServices($dependency_injector)
+    public function defineServices($dependency_injector)
     {
 
     }

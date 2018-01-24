@@ -4,7 +4,7 @@
 namespace Fabs\Rest;
 
 
-use Fabs\Rest\Registrations\ServiceDefinition;
+use Fabs\Rest\Definitions\ServiceDefinition;
 
 class DI implements \ArrayAccess
 {
@@ -46,9 +46,9 @@ class DI implements \ArrayAccess
      */
     public function set($service_name, $definition, $shared = false)
     {
-        $service_registration = new ServiceDefinition($service_name, $definition, $shared);
-        $this->service_lookup[$service_name] = $service_registration;
-        return $service_registration;
+        $service_definition = new ServiceDefinition($service_name, $definition, $shared);
+        $this->service_lookup[$service_name] = $service_definition;
+        return $service_definition;
     }
 
     /**

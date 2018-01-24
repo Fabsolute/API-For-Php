@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Fabs\Rest\Registrations;
+namespace Fabs\Rest\Definitions;
 
 
 abstract class DefinitionBase
