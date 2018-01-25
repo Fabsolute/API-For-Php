@@ -66,51 +66,58 @@ class Application extends Injectable
         $api_definition = $this->router->getMatchedAPIDefinition();
         $action_definition = $this->router->getMatchedActionDefinition();
 
-        if ($kernel_definition === null ||
-            $module_definition === null ||
-            $api_definition === null ||
-            $action_definition === null ||
-            !is_callable([
-                $api_definition->getInstance(),
-                $action_definition->function_name
-            ])) {
-            throw new NotFoundException();
+        try {
+            if ($kernel_definition === null ||
+                $module_definition === null ||
+                $api_definition === null ||
+                $action_definition === null ||
+                !is_callable([
+                    $api_definition->getInstance(),
+                    $action_definition->function_name
+                ])) {
+                throw new NotFoundException();
+            }
+
+            // create
+            $kernel_definition->executeInitialize();
+            $module_definition->executeInitialize();
+            $api_definition->executeInitialize();
+            $action_definition->executeInitialize();
+
+            // before
+            $kernel_definition->executeBefore();
+            $module_definition->executeBefore();
+            $api_definition->executeBefore();
+            $action_definition->executeBefore();
+
+            // execution
+            $returned_value = call_user_func_array(
+                [
+                    $api_definition->getInstance(),
+                    $action_definition->function_name
+                ],
+                $action_definition->parameters
+            );
+
+            $this->response->setReturnedValue($returned_value);
+
+            // after
+            $action_definition->executeAfter();
+            $api_definition->executeAfter();
+            $module_definition->executeAfter();
+            $kernel_definition->executeAfter();
+
+            // destroy
+            $action_definition->executeFinalize();
+            $api_definition->executeFinalize();
+            $module_definition->executeFinalize();
+            $kernel_definition->executeFinalize();
+        } catch (\Exception $exception) {
+            if ($kernel_definition !== null) {
+                $kernel_definition->handleException($exception);
+            } else {
+                throw $exception;
+            }
         }
-
-        // create
-        $kernel_definition->executeInitialize();
-        $module_definition->executeInitialize();
-        $api_definition->executeInitialize();
-        $action_definition->executeInitialize();
-
-        // before
-        $kernel_definition->executeBefore();
-        $module_definition->executeBefore();
-        $api_definition->executeBefore();
-        $action_definition->executeBefore();
-
-        // execution
-        $returned_value = call_user_func_array(
-            [
-                $api_definition->getInstance(),
-                $action_definition->function_name
-            ],
-            $action_definition->parameters
-        );
-
-        $this->response->setReturnedValue($returned_value);
-
-        // after
-        $action_definition->executeAfter();
-        $api_definition->executeAfter();
-        $module_definition->executeAfter();
-        $kernel_definition->executeAfter();
-
-
-        // destroy
-        $action_definition->executeFinalize();
-        $api_definition->executeFinalize();
-        $module_definition->executeFinalize();
-        $kernel_definition->executeFinalize();
     }
 }

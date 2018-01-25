@@ -3,12 +3,15 @@
 
 namespace Test\App;
 
-use Fabs\Rest\KernelBase;
+use Fabs\Rest\Kernel\RestKernel;
 use Test\App\IRobot\IRobotModule;
 
-class Kernel extends KernelBase
+class Kernel extends RestKernel
 {
-    public function initializeKernel()
+    /**
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    protected function initializeREST()
     {
         $this->defineModule('/irobot', IRobotModule::class);
     }

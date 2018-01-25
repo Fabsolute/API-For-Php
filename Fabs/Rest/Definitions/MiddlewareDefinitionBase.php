@@ -42,6 +42,7 @@ abstract class MiddlewareDefinitionBase extends DefinitionBase
 
     public function executeAfter()
     {
+        $this->middleware_instance_list = array_reverse($this->middleware_instance_list);
         foreach ($this->middleware_instance_list as $middleware_instance) {
             $middleware_instance->after();
         }
@@ -50,7 +51,6 @@ abstract class MiddlewareDefinitionBase extends DefinitionBase
     public function executeFinalize()
     {
         foreach ($this->middleware_instance_list as $middleware_instance) {
-
             $middleware_instance->finalize();
         }
     }
@@ -66,6 +66,4 @@ abstract class MiddlewareDefinitionBase extends DefinitionBase
             }
         }
     }
-
-
 }

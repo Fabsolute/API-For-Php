@@ -5,7 +5,6 @@ namespace Fabs\Rest;
 
 use Fabs\Rest\Definitions\KernelDefinition;
 use Fabs\Rest\Definitions\ModuleDefinition;
-use Fabs\Rest\Middlewares\RESTMiddleware;
 
 abstract class KernelBase extends InjectableWithDefinition
 {
@@ -52,14 +51,5 @@ abstract class KernelBase extends InjectableWithDefinition
     /**
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    protected abstract function initializeKernel();
-
-    /**
-     * @author ahmetturk <ahmetturk93@gmail.com>
-     */
-    public final function initialize()
-    {
-        $this->getDefinition()->addMiddleware(RESTMiddleware::class);
-        $this->initializeKernel();
-    }
+    public abstract function initialize();
 }

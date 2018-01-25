@@ -11,6 +11,7 @@ class ClientAPI extends APIBase
     public function initialize()
     {
         $this->defineAction(HttpMethods::GET, '/ruh/{cus}/{yuh}', 'oha');
+        $this->defineAction(HttpMethods::POST, '/a', 'oha');
     }
 
     public function oha($cus, $yuh)
