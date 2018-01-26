@@ -1,11 +1,28 @@
 {
+  "name": "fabs/api",
+  "type": "library",
+  "description": "Php API",
+  "keywords": [
+    "api",
+    "library",
+    "api library",
+    "api framework"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ahmet Turk",
+      "email": "ahmetturk93@gmail.com",
+      "homepage": "https://github.com/fabsolute"
+    }
+  ],
   "autoload": {
     "psr-4": {
-      "Fabs\\Rest\\": "Fabs/Rest",
-      "Test\\App\\": "App"
+      "Fabs\\Rest\\": "Fabs/Rest"
     }
   },
   "require": {
-    "fabs/serialize": "dev-develop"
+    "fabs/serialize": "dev-develop",
+    "php": "^7.0"
   }
 }
