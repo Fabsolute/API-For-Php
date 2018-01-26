@@ -5,7 +5,7 @@ namespace Fabs\Rest;
 
 
 use Fabs\Rest\DI\FactoryDefault;
-use Fabs\Rest\Exceptions\NotFoundException;
+use Fabs\Rest\Exceptions\StatusCodeException\NotFoundException;
 use Fabs\Rest\Definitions\KernelDefinition;
 
 class Application extends Injectable

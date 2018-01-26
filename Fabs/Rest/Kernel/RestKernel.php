@@ -5,7 +5,6 @@ namespace Fabs\Rest\Kernel;
 
 
 use Fabs\Rest\ExceptionHandlers\NotFoundExceptionHandler;
-use Fabs\Rest\Exceptions\NotFoundException;
 use Fabs\Rest\Exceptions\StatusCodeException;
 use Fabs\Rest\KernelBase;
 use Fabs\Rest\Middlewares\RESTMiddleware;

@@ -5,12 +5,12 @@ namespace Fabs\Rest\Middlewares;
 
 
 use Fabs\Rest\Constants\ResponseStatus;
-use Fabs\Rest\Exceptions\BadRequestException;
-use Fabs\Rest\Exceptions\UnprocessableEntityException;
+use Fabs\Rest\Exceptions\StatusCodeException\BadRequestException;
+use Fabs\Rest\Exceptions\StatusCodeException\UnprocessableEntityException;
 use Fabs\Rest\MiddlewareBase;
 use Fabs\Rest\Constants\Headers;
 use Fabs\Rest\Constants\HttpMethods;
-use Fabs\Rest\Exceptions\UnsupportedMediaTypeException;
+use Fabs\Rest\Exceptions\StatusCodeException\UnsupportedMediaTypeException;
 use Fabs\Rest\Models\Response\ResponseModel;
 
 class RESTMiddleware extends MiddlewareBase

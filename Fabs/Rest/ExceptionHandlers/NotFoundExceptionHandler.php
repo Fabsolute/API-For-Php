@@ -10,7 +10,7 @@ use Fabs\Rest\Models\Response\ErrorResponseModel;
 class NotFoundExceptionHandler extends ExceptionHandlerBase
 {
     /**
-     * @param \Fabs\Rest\Exceptions\NotFoundException $exception
+     * @param \Fabs\Rest\Exceptions\StatusCodeException\NotFoundException $exception
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
     public function handle($exception)

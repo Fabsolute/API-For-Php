@@ -1,8 +1,9 @@
 <?php
 
-namespace Fabs\Rest\Exceptions;
+namespace Fabs\Rest\Exceptions\StatusCodeException;
 
 use Fabs\Rest\Constants\HttpStatusCodes;
+use Fabs\Rest\Exceptions\StatusCodeException;
 
 class UnprocessableEntityException extends StatusCodeException
 {
