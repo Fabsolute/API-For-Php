@@ -116,7 +116,9 @@ class Router extends Injectable
      */
     private function match($route, $uri)
     {
-        $uri = rtrim($uri, " \t\n\r\0\x0B/");
+        if ($uri !== '/') {
+            $uri = rtrim($uri, " \t\n\r\0\x0B/");
+        }
         $uri = preg_replace("/\/\/+/", "/", $uri);
 
         $route = str_replace('/', '\\/', $route);
@@ -133,7 +135,7 @@ class Router extends Injectable
                 }
                 return array_values($response);
             }
-            return true;
+            return '/';
         }
         return false;
     }
