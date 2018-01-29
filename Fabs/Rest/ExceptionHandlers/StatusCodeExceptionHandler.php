@@ -7,7 +7,7 @@ use Fabs\Rest\Constants\ResponseStatus;
 use Fabs\Rest\ExceptionHandlerBase;
 use Fabs\Rest\Models\Response\ErrorResponseModel;
 
-class NotFoundExceptionHandler extends ExceptionHandlerBase
+class StatusCodeExceptionHandler extends ExceptionHandlerBase
 {
     /**
      * @param \Fabs\Rest\Exceptions\StatusCodeException\NotFoundException $exception

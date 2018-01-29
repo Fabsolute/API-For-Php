@@ -4,7 +4,7 @@
 namespace Fabs\Rest\Kernel;
 
 
-use Fabs\Rest\ExceptionHandlers\NotFoundExceptionHandler;
+use Fabs\Rest\ExceptionHandlers\StatusCodeExceptionHandler;
 use Fabs\Rest\Exceptions\StatusCodeException;
 use Fabs\Rest\KernelBase;
 use Fabs\Rest\Middlewares\RESTMiddleware;
@@ -23,7 +23,7 @@ abstract class RestKernel extends KernelBase
     {
         $this->getDefinition()
             ->addMiddleware(RESTMiddleware::class)
-            ->setExceptionHandler(StatusCodeException::class, NotFoundExceptionHandler::class);
+            ->setExceptionHandler(StatusCodeException::class, StatusCodeExceptionHandler::class);
 
         $this->initializeREST();
     }
