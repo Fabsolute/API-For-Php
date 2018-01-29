@@ -152,4 +152,17 @@ class Request extends Injectable
     {
         return $this->headers->get($header_name);
     }
+
+    public function getClientAddress()
+    {
+        $ip = $this->http_server->get('REMOTE_ADDR');
+        if ($ip !== null) {
+            if (strpos($ip, ',') !== -1) {
+                $ip_parts = explode(',', $ip);
+                $ip = $ip_parts[0];
+            }
+            return $ip;
+        }
+        return null;
+    }
 }
