@@ -52,6 +52,17 @@ class DI implements \ArrayAccess
     }
 
     /**
+     * @param $service_name
+     * @param $definition
+     * @return ServiceDefinition
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function setShared($service_name, $definition)
+    {
+        return $this->set($service_name, $definition, true);
+    }
+
+    /**
      * @param string $service_name
      * @return ServiceDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
