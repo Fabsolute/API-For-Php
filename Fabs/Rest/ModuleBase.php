@@ -43,13 +43,7 @@ abstract class ModuleBase extends InjectableWithDefinition
     }
 
     /**
-     * @author ahmetturk <ahmetturk93@gmail.com>
-     */
-    public abstract function initialize();
-
-    /**
      * @param $dependency_injector DI
-     * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    public abstract function defineServices($dependency_injector);
+    public abstract function initialize($dependency_injector);
 }

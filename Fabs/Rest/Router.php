@@ -152,8 +152,7 @@ class Router extends Injectable
         /** @var ModuleBase $module_instance */
         $module_instance = $module_definition->getInstance();
 
-        $module_instance->initialize();
-        $module_instance->defineServices($this->getDI());
+        $module_instance->initialize($this->getDI());
         if (is_string($uri)) {
             $api_definition_list = $module_instance->getAPIDefinitionList();
             foreach ($api_definition_list as $api_definition) {
