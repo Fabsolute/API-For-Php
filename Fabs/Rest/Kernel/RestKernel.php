@@ -7,7 +7,9 @@ namespace Fabs\Rest\Kernel;
 use Fabs\Rest\ExceptionHandlers\StatusCodeExceptionHandler;
 use Fabs\Rest\Exceptions\StatusCodeException;
 use Fabs\Rest\KernelBase;
-use Fabs\Rest\Middlewares\RESTMiddleware;
+use Fabs\Rest\Middlewares\IncludeMiddleware;
+use Fabs\Rest\Middlewares\JSONMiddleware;
+use Fabs\Rest\Middlewares\QueryMiddleware;
 
 abstract class RestKernel extends KernelBase
 {
@@ -22,8 +24,11 @@ abstract class RestKernel extends KernelBase
     public final function initialize()
     {
         $this->getDefinition()
-            ->addMiddleware(RESTMiddleware::class)
-            ->setExceptionHandler(StatusCodeException::class, StatusCodeExceptionHandler::class);
+            ->addMiddleware(JSONMiddleware::class)
+            ->addMiddleware(QueryMiddleware::class)
+            ->addMiddleware(IncludeMiddleware::class)
+            ->setExceptionHandler(StatusCodeException::class, StatusCodeExceptionHandler::class)
+            ->setExceptionHandler(\Exception::class, ExceptionHandler::class);
 
         $this->initializeREST();
     }

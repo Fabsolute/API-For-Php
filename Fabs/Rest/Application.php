@@ -33,6 +33,10 @@ class Application extends Injectable
 
     public function run($kernel = null, $type = null)
     {
+        set_error_handler(function ($error_no, $error_message, $error_file, $error_line) {
+            throw new \ErrorException($error_message, 0, $error_no, $error_file, $error_line);
+        });
+
         if ($kernel !== null) {
             $this->defineKernel($type, $kernel);
         }
