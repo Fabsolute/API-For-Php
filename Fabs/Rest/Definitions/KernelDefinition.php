@@ -15,6 +15,10 @@ class KernelDefinition extends MatchableDefinitionBase
     public $class_name = null;
     /** @var string[] */
     private $exception_handler_list = [];
+    /** @var int */
+    private $exception_depth = 0;
+    /** @var int */
+    public static $MAXIMUM_EXCEPTION_DEPTH = 5;
 
     public function getInstance()
     {
@@ -46,12 +50,21 @@ class KernelDefinition extends MatchableDefinitionBase
 
     public function handleException($exception)
     {
-        foreach ($this->exception_handler_list as $exception_class => $handler_class) {
-            if ($exception instanceof $exception_class) {
-                /** @var ExceptionHandlerBase $handler */
-                $handler = new $handler_class();
-                $handler->handle($exception);
-                return;
+        try {
+            foreach ($this->exception_handler_list as $exception_class => $handler_class) {
+                if ($exception instanceof $exception_class) {
+                    /** @var ExceptionHandlerBase $handler */
+                    $handler = new $handler_class();
+                    $handler->handle($exception);
+                    return;
+                }
+            }
+        } catch (\Exception $sub_exception) {
+            if ($this->exception_depth < self::$MAXIMUM_EXCEPTION_DEPTH) {
+                $this->handleException($sub_exception);
+                $this->exception_depth;
+
+                $exception = $sub_exception;
             }
         }
 
