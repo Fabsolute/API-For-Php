@@ -52,8 +52,8 @@ class DI implements \ArrayAccess
     }
 
     /**
-     * @param $service_name
-     * @param $definition
+     * @param string $service_name
+     * @param string|callable|mixed $definition
      * @return ServiceDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
