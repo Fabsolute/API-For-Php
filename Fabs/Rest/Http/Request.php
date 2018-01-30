@@ -6,12 +6,15 @@ namespace Fabs\Rest\Http;
 use Fabs\Rest\Constants\Headers;
 use Fabs\Rest\Constants\HttpMethods;
 use Fabs\Rest\Injectable;
+use Fabs\Rest\Models\Search\SearchQueryModel;
 use Fabs\Rest\Utilities\Dictionary;
 use Fabs\Rest\Http\Request\HeaderDictionary;
 use Fabs\Serialize\SerializableObject;
 
 class Request extends Injectable
 {
+    /** @var string[] */
+    private $include_list = [];
     /** @var Dictionary */
     private $http_get = null;
     /** @var Dictionary */
@@ -22,6 +25,8 @@ class Request extends Injectable
     private $headers = null;
     /** @var string */
     private $raw_body = null;
+    /** @var SearchQueryModel */
+    private $search_query_model = null;
 
     /** @var string */
     private $http_method = null;
@@ -164,5 +169,67 @@ class Request extends Injectable
             return $ip;
         }
         return null;
+    }
+
+    /**
+     * @param string $key
+     * @param string|null $default_value
+     * @return string|null
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function getQuery($key, $default_value = null)
+    {
+        return $this->http_get->get($key, $default_value);
+    }
+
+    /**
+     * @param SearchQueryModel $search_query_model
+     * @return Request
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function setSearchQueryModel($search_query_model)
+    {
+        $this->search_query_model = $search_query_model;
+        return $this;
+    }
+
+    /**
+     * @return SearchQueryModel|null
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function getSearchQueryModel()
+    {
+        return $this->search_query_model;
+    }
+
+    /**
+     * @param string[] $include_list
+     * @return Request
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function setIncludeList($include_list)
+    {
+        $this->include_list = $include_list;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function getIncludeList()
+    {
+        return $this->include_list;
+    }
+
+    /**
+     * @param string $include_name
+     * @return bool
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function hasInclude($include_name)
+    {
+        $include_name = trim(strtolower($include_name));
+        return in_array($include_name, $this->getIncludeList(), true);
     }
 }
