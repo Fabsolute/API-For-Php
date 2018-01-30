@@ -62,10 +62,10 @@ class KernelDefinition extends MatchableDefinitionBase
         } catch (\Exception $sub_exception) {
             if ($this->exception_depth < self::$MAXIMUM_EXCEPTION_DEPTH) {
                 $this->handleException($sub_exception);
-                $this->exception_depth;
-
-                $exception = $sub_exception;
+                $this->exception_depth++;
+                return;
             }
+            $exception = $sub_exception;
         }
 
         throw $exception;
