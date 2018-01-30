@@ -4,6 +4,7 @@
 namespace Fabs\Rest\Kernel;
 
 
+use Fabs\Rest\ExceptionHandlers\ExceptionHandler;
 use Fabs\Rest\ExceptionHandlers\StatusCodeExceptionHandler;
 use Fabs\Rest\Exceptions\StatusCodeException;
 use Fabs\Rest\KernelBase;
