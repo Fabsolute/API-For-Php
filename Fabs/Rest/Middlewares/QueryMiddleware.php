@@ -79,6 +79,7 @@ class QueryMiddleware extends MiddlewareBase
         $response = $this->response->getReturnedValue();
         if ($response instanceof QueryResponseModel) {
             $this->response->setHeader(Headers::X_TOTAL_COUNT, $response->total_count);
+            $this->response->setReturnedValue($response->data);
         }
     }
 }

@@ -3,8 +3,6 @@
 
 namespace Fabs\Rest\Models\Response;
 
-use Fabs\Rest\Constants\ResponseStatus;
-
 class QueryResponseModel extends ResponseModel
 {
     public $total_count = 0;
@@ -13,7 +11,6 @@ class QueryResponseModel extends ResponseModel
     {
         parent::__construct();
 
-        $this->status = ResponseStatus::SUCCESS;
         $this->data = $response;
         $this->total_count = $total_count;
         $this->makeTransient('total_count');
