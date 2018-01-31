@@ -64,6 +64,12 @@ class Dictionary
         return $default;
     }
 
+    /**
+     * @param string $key
+     * @param int $default
+     * @return int
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
     public function getInt($key, $default = 0)
     {
         return (int)$this->get($key, $default);

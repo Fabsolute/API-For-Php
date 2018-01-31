@@ -183,6 +183,17 @@ class Request extends Injectable
     }
 
     /**
+     * @param string $key
+     * @param int $default_value
+     * @return int
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function getIntQuery($key, $default_value = 0)
+    {
+        return $this->http_get->getInt($key, $default_value);
+    }
+
+    /**
      * @param SearchQueryModel $search_query_model
      * @return Request
      * @author ahmetturk <ahmetturk93@gmail.com>
