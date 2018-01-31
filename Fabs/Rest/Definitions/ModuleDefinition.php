@@ -8,21 +8,22 @@ class ModuleDefinition extends MatchableDefinitionBase
 {
     /** @var string */
     public $route = null;
-    /** @var string */
-    public $class_name = null;
-    /** @var mixed|null */
-    public $extra_data = null;
+    /** @var string|callable */
+    public $definition = null;
 
     public function getInstance()
     {
+        /** @var InjectableWithDefinition $instance */
         $instance = parent::getInstance();
 
         if ($instance === null) {
+            if (is_callable($this->definition)) {
+                $instance = call_user_func($this->definition);
+            } else {
+                $instance = new $this->definition();
+            }
 
-            /** @var InjectableWithDefinition $instance */
-            $instance = new $this->class_name($this->extra_data);
             $instance->setDefinition($this);
-
             $this->setInstance($instance);
         }
 

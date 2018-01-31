@@ -4,15 +4,15 @@
 namespace Fabs\Rest;
 
 
-use Fabs\Rest\Definitions\DefinitionBase;
+use Fabs\Rest\Definitions\MiddlewareDefinitionBase;
 
 abstract class InjectableWithDefinition extends Injectable
 {
-    /** @var DefinitionBase */
+    /** @var MiddlewareDefinitionBase */
     private $definition = null;
 
     /**
-     * @return DefinitionBase
+     * @return MiddlewareDefinitionBase
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
     public function getDefinition()

@@ -13,17 +13,15 @@ abstract class KernelBase extends InjectableWithDefinition
 
     /**
      * @param string $route
-     * @param string $class_name
-     * @param mixed $extra_data
+     * @param string|callable $definition
      * @return ModuleDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    protected function defineModule($route, $class_name, $extra_data = null)
+    protected function defineModule($route, $definition)
     {
         $module_definition = new ModuleDefinition();
         $module_definition->route = $route;
-        $module_definition->class_name = $class_name;
-        $module_definition->extra_data = $extra_data;
+        $module_definition->definition = $definition;
         $this->module_definition_list[] = $module_definition;
         return $module_definition;
     }
