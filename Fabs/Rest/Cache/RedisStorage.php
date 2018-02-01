@@ -78,7 +78,7 @@ class RedisStorage implements StorageInterface, SerializerInterface
         $redis = $this->getRedis();
         $serializer = $this->getSerializer();
 
-        if ($this->config->prefix !== null) {
+        if ($this->config->prefix !== null && strlen($this->config->prefix) > 0) {
             $key = $this->config->prefix . $key;
         }
 
