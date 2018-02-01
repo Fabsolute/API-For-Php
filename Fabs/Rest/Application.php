@@ -64,7 +64,7 @@ class Application extends Injectable
     {
         $kernel_definition = new KernelDefinition();
         $kernel_definition->type = $type;
-        $kernel_definition->definition = $definition;
+        $kernel_definition->setDefinition($definition);
         $this->kernel_definition_list[] = $kernel_definition;
         return $kernel_definition;
     }
@@ -86,11 +86,11 @@ class Application extends Injectable
                 $module_definition === null ||
                 $api_definition === null ||
                 $action_definition === null ||
-                !is_callable($action_definition->definition) ||
+                !is_callable($action_definition->getDefinition()) ||
                 !is_callable(
                     [
                         $api_definition->getInstance(),
-                        $action_definition->definition
+                        $action_definition->getDefinition()
                     ]
                 )) {
                 throw new NotFoundException();
@@ -109,16 +109,16 @@ class Application extends Injectable
             $action_definition->executeBefore();
 
             // execution
-            if (is_callable($action_definition->definition)) {
+            if (is_callable($action_definition->getDefinition())) {
                 $returned_value = call_user_func_array(
-                    $action_definition->definition,
+                    $action_definition->getDefinition(),
                     $action_definition->parameters
                 );
             } else {
                 $returned_value = call_user_func_array(
                     [
                         $api_definition->getInstance(),
-                        $action_definition->definition
+                        $action_definition->getDefinition()
                     ],
                     $action_definition->parameters
                 );

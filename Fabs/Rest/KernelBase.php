@@ -21,7 +21,7 @@ abstract class KernelBase extends InjectableWithDefinition
     {
         $module_definition = new ModuleDefinition();
         $module_definition->route = $route;
-        $module_definition->definition = $definition;
+        $module_definition->setDefinition($definition);
         $this->module_definition_list[] = $module_definition;
         return $module_definition;
     }

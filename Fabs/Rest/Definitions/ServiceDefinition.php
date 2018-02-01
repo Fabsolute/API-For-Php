@@ -6,10 +6,10 @@ class ServiceDefinition extends DefinitionBase
 {
     /** @var string */
     private $service_name = null;
-    /** @var string|callable|mixed */
-    private $definition = null;
     /** @var bool */
     private $shared = false;
+    /** @var mixed */
+    private $instance = null;
 
     /**
      * ServiceDefinition constructor.
@@ -20,7 +20,7 @@ class ServiceDefinition extends DefinitionBase
     public function __construct($service_name, $definition, $shared)
     {
         $this->service_name = $service_name;
-        $this->definition = $definition;
+        $this->setDefinition($definition);
         $this->shared = $shared;
     }
 
@@ -31,15 +31,6 @@ class ServiceDefinition extends DefinitionBase
     public function getServiceName()
     {
         return $this->service_name;
-    }
-
-    /**
-     * @return callable|mixed|string
-     * @author ahmetturk <ahmetturk93@gmail.com>
-     */
-    public function getDefinition()
-    {
-        return $this->definition;
     }
 
     /**
@@ -69,22 +60,22 @@ class ServiceDefinition extends DefinitionBase
      */
     public function setDefinition($definition)
     {
-        if ($this->definition != $definition) {
+        if ($this->getDefinition() != $definition) {
             $this->setInstance(null);
         }
-        $this->definition = $definition;
+        parent::setDefinition($definition);
         return $this;
     }
 
     public function getInstance()
     {
-        $instance = parent::getInstance();
-
         if ($this->isShared()) {
-            if ($instance !== null) {
-                return $instance;
+            if ($this->instance !== null) {
+                return $this->instance;
             }
         }
+
+        $instance = $this->instance;
 
         $definition = $this->getDefinition();
 

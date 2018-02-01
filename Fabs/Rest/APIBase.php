@@ -21,7 +21,7 @@ abstract class APIBase extends InjectableWithDefinition
         $action_definition = new ActionDefinition();
         $action_definition->method = $method;
         $action_definition->route = $route;
-        $action_definition->definition = $definition;
+        $action_definition->setDefinition($definition);
         if ($this->request->isMethod($method)) {
             $this->action_definition_list[] = $action_definition;
         }

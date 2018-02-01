@@ -7,14 +7,12 @@ namespace Fabs\Rest\Definitions;
 use Fabs\Rest\Models\Search\QueryElement;
 use Fabs\Rest\Models\Search\SortQueryElement;
 
-class ActionDefinition extends MatchableDefinitionBase
+class ActionDefinition extends MiddlewareDefinitionBase
 {
     /** @var string */
     public $method = null;
     /** @var string */
     public $route = null;
-    /** @var string|callable */
-    public $definition = null;
     /** @var mixed[] */
     public $parameters = [];
     /** @var string[] */

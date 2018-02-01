@@ -29,7 +29,7 @@ abstract class ModuleBase extends InjectableWithDefinition
     {
         $api_definition = new APIDefinition();
         $api_definition->route = $route;
-        $api_definition->definition = $definition;
+        $api_definition->setDefinition( $definition);
         $this->api_definition_list[] = $api_definition;
         return $api_definition;
     }

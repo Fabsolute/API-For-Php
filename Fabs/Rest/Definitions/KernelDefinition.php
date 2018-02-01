@@ -5,38 +5,17 @@ namespace Fabs\Rest\Definitions;
 
 
 use Fabs\Rest\ExceptionHandlerBase;
-use Fabs\Rest\InjectableWithDefinition;
 
-class KernelDefinition extends MatchableDefinitionBase
+class KernelDefinition extends MiddlewareDefinitionBase
 {
     /** @var string */
     public $type = null;
-    /** @var string|callable */
-    public $definition = null;
     /** @var string[] */
     private $exception_handler_list = [];
     /** @var int */
     private $exception_depth = 0;
     /** @var int */
     public static $MAXIMUM_EXCEPTION_DEPTH = 5;
-
-    public function getInstance()
-    {
-        /** @var InjectableWithDefinition $instance */
-        $instance = parent::getInstance();
-
-        if ($instance === null) {
-            if (is_callable($this->definition)) {
-                $instance = call_user_func($this->definition);
-            } else {
-                $instance = new $this->definition;
-            }
-            $instance->setDefinition($this);
-            $this->setInstance($instance);
-        }
-
-        return $instance;
-    }
 
     /**
      * @param string $exception_class
