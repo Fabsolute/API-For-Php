@@ -57,7 +57,7 @@ class Dictionary
      */
     public function get($key, $default = null)
     {
-        if ($this->has($key)) {
+        if (array_key_exists($this->prepareKey($key), $this->source)) {
             return $this->source[$this->prepareKey($key)];
         }
 
