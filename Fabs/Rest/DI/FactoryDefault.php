@@ -11,8 +11,8 @@ class FactoryDefault extends DI
 {
     public function __construct()
     {
-        $this->set('router', Router::class,true);
-        $this->set('request', Request::class,true);
-        $this->set('response', Response::class,true);
+        $this->setShared('router', Router::class);
+        $this->setShared('request', Request::class);
+        $this->setShared('response', Response::class);
     }
 }

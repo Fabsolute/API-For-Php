@@ -92,7 +92,7 @@ class ServiceDefinition extends DefinitionBase
         }
 
         if ($this->isShared()) {
-            $this->setInstance($instance);
+            $this->instance = $instance;
         }
 
         return $instance;
