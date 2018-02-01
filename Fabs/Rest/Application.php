@@ -31,6 +31,11 @@ class Application extends Injectable
     {
     }
 
+    /**
+     * @param string|callable|null $kernel
+     * @param string|null $type
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
     public function run($kernel = null, $type = null)
     {
         set_error_handler(function ($error_no, $error_message, $error_file, $error_line) {
@@ -49,11 +54,17 @@ class Application extends Injectable
         $this->execute();
     }
 
-    protected function defineKernel($type, $class_name)
+    /**
+     * @param string $type
+     * @param string|callable $definition
+     * @return KernelDefinition
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    protected function defineKernel($type, $definition)
     {
         $kernel_definition = new KernelDefinition();
         $kernel_definition->type = $type;
-        $kernel_definition->class_name = $class_name;
+        $kernel_definition->definition = $definition;
         $this->kernel_definition_list[] = $kernel_definition;
         return $kernel_definition;
     }
@@ -75,10 +86,13 @@ class Application extends Injectable
                 $module_definition === null ||
                 $api_definition === null ||
                 $action_definition === null ||
-                !is_callable([
-                    $api_definition->getInstance(),
-                    $action_definition->function_name
-                ])) {
+                !is_callable($action_definition->definition) ||
+                !is_callable(
+                    [
+                        $api_definition->getInstance(),
+                        $action_definition->definition
+                    ]
+                )) {
                 throw new NotFoundException();
             }
 
@@ -95,13 +109,20 @@ class Application extends Injectable
             $action_definition->executeBefore();
 
             // execution
-            $returned_value = call_user_func_array(
-                [
-                    $api_definition->getInstance(),
-                    $action_definition->function_name
-                ],
-                $action_definition->parameters
-            );
+            if (is_callable($action_definition->definition)) {
+                $returned_value = call_user_func_array(
+                    $action_definition->definition,
+                    $action_definition->parameters
+                );
+            } else {
+                $returned_value = call_user_func_array(
+                    [
+                        $api_definition->getInstance(),
+                        $action_definition->definition
+                    ],
+                    $action_definition->parameters
+                );
+            }
 
             $this->response->setReturnedValue($returned_value);
 

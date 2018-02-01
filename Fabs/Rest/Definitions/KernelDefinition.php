@@ -11,8 +11,8 @@ class KernelDefinition extends MatchableDefinitionBase
 {
     /** @var string */
     public $type = null;
-    /** @var string */
-    public $class_name = null;
+    /** @var string|callable */
+    public $definition = null;
     /** @var string[] */
     private $exception_handler_list = [];
     /** @var int */
@@ -22,14 +22,16 @@ class KernelDefinition extends MatchableDefinitionBase
 
     public function getInstance()
     {
+        /** @var InjectableWithDefinition $instance */
         $instance = parent::getInstance();
 
         if ($instance === null) {
-
-            /** @var InjectableWithDefinition $instance */
-            $instance = new $this->class_name;
+            if (is_callable($this->definition)) {
+                $instance = call_user_func($this->definition);
+            } else {
+                $instance = new $this->definition;
+            }
             $instance->setDefinition($this);
-
             $this->setInstance($instance);
         }
 

@@ -12,16 +12,16 @@ abstract class APIBase extends InjectableWithDefinition
     /**
      * @param string $method
      * @param string $route
-     * @param string $function_name
+     * @param string|callable $definition
      * @return ActionDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    protected function defineAction($method, $route, $function_name)
+    protected function defineAction($method, $route, $definition)
     {
         $action_definition = new ActionDefinition();
         $action_definition->method = $method;
         $action_definition->route = $route;
-        $action_definition->function_name = $function_name;
+        $action_definition->definition = $definition;
         if ($this->request->isMethod($method)) {
             $this->action_definition_list[] = $action_definition;
         }

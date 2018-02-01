@@ -12,14 +12,6 @@ abstract class ModuleBase extends InjectableWithDefinition
     private $api_definition_list = [];
 
     /**
-     * ModuleBase constructor.
-     * @param mixed $extra_data
-     */
-    public function __construct($extra_data = null)
-    {
-    }
-
-    /**
      * @return APIDefinition[]
      */
     public function getAPIDefinitionList()
@@ -29,15 +21,15 @@ abstract class ModuleBase extends InjectableWithDefinition
 
     /**
      * @param string $route
-     * @param string $class_name
+     * @param string|callable $definition
      * @return APIDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    protected function defineAPI($route, $class_name)
+    protected function defineAPI($route, $definition)
     {
         $api_definition = new APIDefinition();
         $api_definition->route = $route;
-        $api_definition->class_name = $class_name;
+        $api_definition->definition = $definition;
         $this->api_definition_list[] = $api_definition;
         return $api_definition;
     }

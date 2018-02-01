@@ -13,8 +13,8 @@ class ActionDefinition extends MatchableDefinitionBase
     public $method = null;
     /** @var string */
     public $route = null;
-    /** @var string */
-    public $function_name = null;
+    /** @var string|callable */
+    public $definition = null;
     /** @var mixed[] */
     public $parameters = [];
     /** @var string[] */
