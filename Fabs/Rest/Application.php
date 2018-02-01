@@ -86,13 +86,14 @@ class Application extends Injectable
                 $module_definition === null ||
                 $api_definition === null ||
                 $action_definition === null ||
-                !is_callable($action_definition->getDefinition()) ||
-                !is_callable(
-                    [
-                        $api_definition->getInstance(),
-                        $action_definition->getDefinition()
-                    ]
-                )) {
+                (
+                    !is_callable($action_definition->getDefinition()) &&
+                    !is_callable(
+                        [
+                            $api_definition->getInstance(),
+                            $action_definition->getDefinition()
+                        ]
+                    ))) {
                 throw new NotFoundException();
             }
 
