@@ -46,9 +46,7 @@ class RedisStorage implements StorageInterface, SerializerInterface
         $redis = $this->getRedis();
         $serializer = $this->getSerializer();
 
-        if ($this->config->prefix !== null) {
-            $key = $this->config->prefix . $key;
-        }
+        $key = $this->getKeyWithPrefix($key);
 
         $content = $serializer->serialize($value);
 
@@ -78,9 +76,7 @@ class RedisStorage implements StorageInterface, SerializerInterface
         $redis = $this->getRedis();
         $serializer = $this->getSerializer();
 
-        if ($this->config->prefix !== null && strlen($this->config->prefix) > 0) {
-            $key = $this->config->prefix . $key;
-        }
+        $key = $this->getKeyWithPrefix($key);
 
         $content = $redis->get($key);
 
@@ -99,9 +95,7 @@ class RedisStorage implements StorageInterface, SerializerInterface
     {
         $redis = $this->getRedis();
 
-        if ($this->config->prefix !== null) {
-            $key = $this->config->prefix . $key;
-        }
+        $key = $this->getKeyWithPrefix($key);
 
         $redis->delete($key);
         return true;
@@ -115,9 +109,7 @@ class RedisStorage implements StorageInterface, SerializerInterface
     {
         $redis = $this->getRedis();
 
-        if ($this->config->prefix !== null) {
-            $key = $this->config->prefix . $key;
-        }
+        $key = $this->getKeyWithPrefix($key);
 
         return $redis->exists($key);
     }
@@ -190,5 +182,13 @@ class RedisStorage implements StorageInterface, SerializerInterface
         }
 
         return $this->redis;
+    }
+
+    private function getKeyWithPrefix($key)
+    {
+        if ($this->config->prefix !== null && strlen($this->config->prefix) > 0) {
+            $key = $this->config->prefix . $key;
+        }
+        return $key;
     }
 }
