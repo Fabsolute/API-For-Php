@@ -69,7 +69,7 @@ class QueryMiddleware extends MiddlewareBase
         }
 
         $search_queries->setPage($this->request->getIntQuery('page'));
-        $search_queries->setPage($this->request->getIntQuery('per_page'));
+        $search_queries->setPerPage($this->request->getIntQuery('per_page'));
 
         $this->request->setSearchQueryModel($search_queries);
     }
