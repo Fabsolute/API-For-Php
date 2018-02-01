@@ -91,7 +91,7 @@ class Request extends Injectable
      */
     public function getRawBody()
     {
-        if ($this->raw_body !== null) {
+        if ($this->raw_body === null) {
             $this->raw_body = file_get_contents('php://input');
         }
 
