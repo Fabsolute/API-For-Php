@@ -184,6 +184,17 @@ class Request extends Injectable
 
     /**
      * @param string $key
+     * @param string|null $default_value
+     * @return string|null
+     * @author ahmetturk <ahmetturk93@gmail.com>
+     */
+    public function getPost($key, $default_value = null)
+    {
+        return $this->http_post->get($key, $default_value);
+    }
+
+    /**
+     * @param string $key
      * @param int $default_value
      * @return int
      * @author ahmetturk <ahmetturk93@gmail.com>
