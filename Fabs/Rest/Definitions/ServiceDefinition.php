@@ -2,6 +2,8 @@
 
 namespace Fabs\Rest\Definitions;
 
+use Fabs\Rest\ServiceFactoryBase;
+
 class ServiceDefinition extends DefinitionBase
 {
     /** @var string */
@@ -10,18 +12,22 @@ class ServiceDefinition extends DefinitionBase
     private $shared = false;
     /** @var mixed */
     private $instance = null;
+    /** @var mixed[] */
+    private $parameters = null;
 
     /**
      * ServiceDefinition constructor.
      * @param string $service_name
      * @param string|callable|mixed $definition
      * @param bool $shared
+     * @param mixed[] $parameters
      */
-    public function __construct($service_name, $definition, $shared)
+    public function __construct($service_name, $definition, $shared, $parameters = [])
     {
         $this->service_name = $service_name;
         $this->setDefinition($definition);
         $this->shared = $shared;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -82,6 +88,9 @@ class ServiceDefinition extends DefinitionBase
         if (is_string($definition)) {
             if (class_exists($definition)) {
                 $instance = new $definition;
+                if ($instance instanceof ServiceFactoryBase) {
+                    $instance = $instance->create($this->parameters);
+                }
             }
         } else {
             if (is_callable($definition)) {
