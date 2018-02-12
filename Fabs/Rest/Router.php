@@ -34,17 +34,7 @@ class Router extends Injectable
         if ($uri === null) {
             $uri = $this->request->getURI();
         }
-
-        $kernel_definition_list = $this->application->getKernelDefinitionList();
-        foreach ($kernel_definition_list as $kernel_definition) {
-            if (
-                (PHP_SAPI === 'cli' && $kernel_definition->type === PHP_SAPI) ||
-                (PHP_SAPI !== 'cli' && $kernel_definition->type !== 'cli')
-            ) {
-                $this->kernelMatched($kernel_definition, $uri);
-                return;
-            }
-        }
+        $this->kernelMatched($this->kernel->getDefinition(), $uri);
     }
 
     /**

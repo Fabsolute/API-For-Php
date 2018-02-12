@@ -9,10 +9,10 @@ use Fabs\Rest\Http\Response;
  * Class Injectable
  * @package Fabs\Rest
  *
- * @property Application application
  * @property Router router
  * @property Request request
  * @property Response response
+ * @property KernelBase kernel
  */
 abstract class Injectable
 {
