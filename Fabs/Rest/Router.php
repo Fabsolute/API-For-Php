@@ -4,6 +4,7 @@
 namespace Fabs\Rest;
 
 
+use Fabs\LINQ\LINQ;
 use Fabs\Rest\Definitions\ActionDefinition;
 use Fabs\Rest\Definitions\APIDefinition;
 use Fabs\Rest\Definitions\KernelDefinition;
@@ -19,6 +20,10 @@ class Router extends Injectable
     private $matched_action_definition = null;
     /** @var KernelDefinition */
     private $matched_kernel_definition = null;
+    /** @var bool */
+    private $is_action_matched = false;
+    /** @var bool */
+    private $auto_allow_options_method = false;
 
     /**
      * @param string $uri
@@ -178,11 +183,24 @@ class Router extends Injectable
 
         $api_instance->initialize();
         if (is_string($uri)) {
-            $action_definition_list = $api_instance->getActionDefinitionList();
-            foreach ($action_definition_list as $action_definition) {
-                $new_uri = $this->match($action_definition->getCompiledRoute(), $uri);
+            $compiled_route_action_definition_list_lookup = LINQ::from($api_instance->getActionDefinitionList())
+                ->groupBy(function ($action_definition) {
+                    /** @var ActionDefinition $action_definition */
+                    return $action_definition->getCompiledRoute();
+                })
+                ->toArray();
+
+            foreach ($compiled_route_action_definition_list_lookup as $compiled_route => $action_definition_list) {
+                $new_uri = $this->match($compiled_route, $uri);
                 if ($new_uri !== false) {
-                    $this->actionMatched($action_definition, $new_uri);
+                    $this->is_action_matched = true;
+                    /** @var ActionDefinition $action_definition */
+                    foreach ($action_definition_list as $action_definition) {
+                        if ($this->request->isMethod($action_definition->method)) {
+                            $this->actionMatched($action_definition, $new_uri);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -198,5 +216,31 @@ class Router extends Injectable
         if (is_array($uri)) {
             $this->matched_action_definition->parameters = $uri;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActionMatched()
+    {
+        return $this->is_action_matched;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoAllowOptionsMethod()
+    {
+        return $this->auto_allow_options_method;
+    }
+
+    /**
+     * @param bool $auto_allow_options_method
+     * @return Router
+     */
+    public function setAutoAllowOptionsMethod($auto_allow_options_method)
+    {
+        $this->auto_allow_options_method = $auto_allow_options_method;
+        return $this;
     }
 }

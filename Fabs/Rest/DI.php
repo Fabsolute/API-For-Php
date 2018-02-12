@@ -41,11 +41,11 @@ class DI implements \ArrayAccess
      * @param string $service_name
      * @param string|callable|mixed $definition
      * @param bool $shared
-     * @param mixed[] $parameters
+     * @param array $parameters
      * @return ServiceDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    public function set($service_name, $definition, $shared = false, ...$parameters)
+    public function set($service_name, $definition, $shared = false, $parameters = [])
     {
         $service_definition = new ServiceDefinition($service_name, $definition, $shared, $parameters);
         $this->service_lookup[$service_name] = $service_definition;
@@ -55,13 +55,13 @@ class DI implements \ArrayAccess
     /**
      * @param string $service_name
      * @param string|callable|mixed $definition
-     * @param mixed[] $parameters
+     * @param array $parameters
      * @return ServiceDefinition
      * @author ahmetturk <ahmetturk93@gmail.com>
      */
-    public function setShared($service_name, $definition, ...$parameters)
+    public function setShared($service_name, $definition, $parameters = [])
     {
-        return $this->set($service_name, $definition, true, ...$parameters);
+        return $this->set($service_name, $definition, true, $parameters);
     }
 
     /**

@@ -4,7 +4,9 @@
 namespace Fabs\Rest;
 
 
+use Fabs\Rest\Constants\HttpMethods;
 use Fabs\Rest\DI\FactoryDefault;
+use Fabs\Rest\Exceptions\StatusCodeException\MethodNotAllowedException;
 use Fabs\Rest\Exceptions\StatusCodeException\NotFoundException;
 use Fabs\Rest\Definitions\KernelDefinition;
 
@@ -81,6 +83,20 @@ class Application extends Injectable
         $api_definition = $this->router->getMatchedAPIDefinition();
         $action_definition = $this->router->getMatchedActionDefinition();
 
+        // create
+        if ($kernel_definition !== null) {
+            $kernel_definition->executeInitialize();
+        }
+        if ($module_definition !== null) {
+            $module_definition->executeInitialize();
+        }
+        if ($api_definition !== null) {
+            $api_definition->executeInitialize();
+        }
+        if ($action_definition !== null) {
+            $action_definition->executeInitialize();
+        }
+
         try {
             if ($kernel_definition === null ||
                 $module_definition === null ||
@@ -94,47 +110,55 @@ class Application extends Injectable
                             $action_definition->getDefinition()
                         ]
                     ))) {
-                throw new NotFoundException();
+                if ($this->router->isActionMatched()) {
+                    if (!$this->request->isMethod(HttpMethods::OPTIONS) || !$this->router->isAutoAllowOptionsMethod()) {
+                        throw new MethodNotAllowedException();
+                    }
+                } else {
+                    throw new NotFoundException();
+                }
             }
 
-            // create
-            $kernel_definition->executeInitialize();
-            $module_definition->executeInitialize();
-            $api_definition->executeInitialize();
-            $action_definition->executeInitialize();
 
             // before
             $kernel_definition->executeBefore();
             $module_definition->executeBefore();
             $api_definition->executeBefore();
-            $action_definition->executeBefore();
 
-            // execution
-            if (is_callable($action_definition->getDefinition())) {
-                $returned_value = call_user_func_array(
-                    $action_definition->getDefinition(),
-                    $action_definition->parameters
-                );
-            } else {
-                $returned_value = call_user_func_array(
-                    [
-                        $api_definition->getInstance(),
-                        $action_definition->getDefinition()
-                    ],
-                    $action_definition->parameters
-                );
+            if ($action_definition !== null) {
+                $action_definition->executeBefore();
+
+                // execution
+                if (is_callable($action_definition->getDefinition())) {
+                    $returned_value = call_user_func_array(
+                        $action_definition->getDefinition(),
+                        $action_definition->parameters
+                    );
+                } else {
+                    $returned_value = call_user_func_array(
+                        [
+                            $api_definition->getInstance(),
+                            $action_definition->getDefinition()
+                        ],
+                        $action_definition->parameters
+                    );
+                }
+
+                $this->response->setReturnedValue($returned_value);
+
+                // after
+                $action_definition->executeAfter();
             }
 
-            $this->response->setReturnedValue($returned_value);
-
-            // after
-            $action_definition->executeAfter();
             $api_definition->executeAfter();
             $module_definition->executeAfter();
             $kernel_definition->executeAfter();
 
             // destroy
-            $action_definition->executeFinalize();
+            if ($action_definition !== null) {
+                $action_definition->executeFinalize();
+            }
+
             $api_definition->executeFinalize();
             $module_definition->executeFinalize();
             $kernel_definition->executeFinalize();
