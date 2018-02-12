@@ -33,7 +33,7 @@ abstract class KernelBase extends InjectableWithDefinition
             DI::setDefault($dependency_injector);
         }
 
-        $dependency_injector->set('kernel', $this);
+        $dependency_injector->setShared('kernel', $this);
     }
 
     /**
@@ -72,6 +72,7 @@ abstract class KernelBase extends InjectableWithDefinition
             $definition = new KernelDefinition();
             $definition->type = KernelTypes::WEB;
             $definition->setDefinition(static::class);
+            $definition->setInstance($this);
             $this->setDefinition($definition);
         }
         return $definition;
