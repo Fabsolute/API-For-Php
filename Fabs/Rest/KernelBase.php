@@ -95,7 +95,7 @@ abstract class KernelBase extends InjectableWithDefinition
         return $this;
     }
 
-    protected function handleException($exception)
+    public function handleException($exception)
     {
         try {
             foreach ($this->exception_handler_list as $exception_class => $handler_class) {

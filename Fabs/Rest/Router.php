@@ -48,7 +48,6 @@ class Router extends Injectable
 
         /** @var KernelBase $kernel_instance */
         $kernel_instance = $kernel_definition->getInstance();
-        $kernel_instance->initialize();
 
         $module_definition_list = $kernel_instance->getModuleDefinitionList();
         foreach ($module_definition_list as $module_definition) {
