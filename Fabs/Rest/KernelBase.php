@@ -4,6 +4,7 @@
 namespace Fabs\Rest;
 
 use Fabs\Rest\Constants\HttpMethods;
+use Fabs\Rest\Constants\KernelTypes;
 use Fabs\Rest\Definitions\KernelDefinition;
 use Fabs\Rest\Definitions\ModuleDefinition;
 use Fabs\Rest\DI\FactoryDefault;
@@ -67,6 +68,11 @@ abstract class KernelBase extends InjectableWithDefinition
     {
         /** @var KernelDefinition $definition */
         $definition = parent::getDefinition();
+        if ($definition === null) {
+            $definition = new KernelDefinition();
+            $definition->type = KernelTypes::WEB;
+            $this->setDefinition($definition);
+        }
         return $definition;
     }
 
