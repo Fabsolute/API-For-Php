@@ -44,11 +44,8 @@ class Response extends Injectable
 
     public function send()
     {
-        $this->is_sent = true;
-        // todo headers
-        if (is_array($this->getReturnedValue()) || $this->getReturnedValue() instanceof \JsonSerializable) {
-            $this->setHeader(Headers::CONTENT_TYPE, 'application/json');
-
+        if ($this->is_sent === false) {
+            $this->is_sent = true;
             $this->sendHeaders();
             $this->sendContent();
         }

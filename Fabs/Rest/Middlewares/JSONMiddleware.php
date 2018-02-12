@@ -60,6 +60,7 @@ class JSONMiddleware extends MiddlewareBase
     public function finalize()
     {
         if ($this->response->isSent() === false) {
+            $this->response->setHeader(Headers::CONTENT_TYPE, 'application/json');
             $this->response->send();
         }
     }
