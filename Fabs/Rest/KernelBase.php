@@ -71,6 +71,7 @@ abstract class KernelBase extends InjectableWithDefinition
         if ($definition === null) {
             $definition = new KernelDefinition();
             $definition->type = KernelTypes::WEB;
+            $definition->setDefinition(static::class);
             $this->setDefinition($definition);
         }
         return $definition;
