@@ -21,6 +21,7 @@ class StatusCodeExceptionHandler extends ExceptionHandlerBase
         $error_response_model->error_details = $exception->getErrorDetails();
 
         $this->response
+            ->setContentTypeJson()
             ->setReturnedValue(
                 $error_response_model
             )

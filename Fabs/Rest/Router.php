@@ -32,7 +32,7 @@ class Router extends Injectable
     public function execute($uri = null)
     {
         if ($uri === null) {
-            $uri = $this->request->getURI();
+            $uri = $this->request->getPathInfo();
         }
         $this->kernelMatched($this->kernel->getDefinition(), $uri);
     }

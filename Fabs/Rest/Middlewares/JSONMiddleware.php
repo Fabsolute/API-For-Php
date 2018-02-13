@@ -44,8 +44,7 @@ class JSONMiddleware extends MiddlewareBase
     public function after()
     {
         if ($this->response->isSent() === false) {
-            $this->response->headers->set(Headers::CONTENT_TYPE, 'application/json');
-            $returned_value = $this->response->getReturnedValue();
+            $returned_value = $this->response->setContentTypeJson()->getReturnedValue();
             if ($returned_value instanceof ResponseModel) {
                 $response_model = $returned_value;
             } else {

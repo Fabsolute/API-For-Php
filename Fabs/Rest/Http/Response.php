@@ -61,4 +61,13 @@ class Response extends SymfonyResponse
 
         return $this;
     }
+
+    /**
+     * @return Response
+     */
+    public function setContentTypeJson()
+    {
+        $this->headers->set(Headers::CONTENT_TYPE, 'application/json');
+        return $this;
+    }
 }
