@@ -27,8 +27,9 @@ abstract class RestKernel extends KernelBase
         $this->getDefinition()
             ->addMiddleware(JSONMiddleware::class)
             ->addMiddleware(QueryMiddleware::class)
-            ->addMiddleware(IncludeMiddleware::class)
-            ->setExceptionHandler(StatusCodeException::class, StatusCodeExceptionHandler::class)
+            ->addMiddleware(IncludeMiddleware::class);
+
+        $this->setExceptionHandler(StatusCodeException::class, StatusCodeExceptionHandler::class)
             ->setExceptionHandler(\Exception::class, ExceptionHandler::class);
 
         $this->initializeREST();

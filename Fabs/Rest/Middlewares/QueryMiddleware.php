@@ -22,10 +22,10 @@ class QueryMiddleware extends MiddlewareBase
         }
 
         $search_queries = new SearchQueryModel();
-        $sort_by = $this->request->getQuery('sort_by');
-        $sort_by_descending = $this->request->getQuery('sort_by_descending');
+        $sort_by = $this->request->query->get('sort_by');
+        $sort_by_descending = $this->request->query->get('sort_by_descending');
         foreach ($action_definition->getQueryElementList() as $query_element) {
-            $query_value = $this->request->getQuery($query_element->getQueryName());
+            $query_value = $this->request->query->get($query_element->getQueryName());
             if ($query_value !== null) {
                 if (is_callable($query_element->getFilter())) {
                     $query_value = call_user_func($query_element->getFilter(), $query_value);
@@ -68,8 +68,8 @@ class QueryMiddleware extends MiddlewareBase
             $search_queries->setSortQueryElement($action_definition->getDefaultSortQueryElement());
         }
 
-        $search_queries->setPage($this->request->getIntQuery('page'));
-        $search_queries->setPerPage($this->request->getIntQuery('per_page'));
+        $search_queries->setPage($this->request->query->getInt('page'));
+        $search_queries->setPerPage($this->request->query->getInt('per_page'));
 
         $this->request->setSearchQueryModel($search_queries);
     }
@@ -78,7 +78,7 @@ class QueryMiddleware extends MiddlewareBase
     {
         $response = $this->response->getReturnedValue();
         if ($response instanceof QueryResponseModel) {
-            $this->response->setHeader(Headers::X_TOTAL_COUNT, $response->total_count);
+            $this->response->headers->set(Headers::X_TOTAL_COUNT, $response->total_count);
             $this->response->setReturnedValue($response->data);
         }
     }

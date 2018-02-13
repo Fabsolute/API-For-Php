@@ -24,6 +24,7 @@
   "require": {
     "fabs/serialize": "dev-develop",
     "fabs/linq": "dev-develop",
-    "php": "^7.0"
+    "php": "^7.0",
+    "symfony/http-foundation": "^3.4"
   }
 }

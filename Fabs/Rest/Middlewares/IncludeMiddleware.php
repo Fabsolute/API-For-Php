@@ -14,7 +14,7 @@ class IncludeMiddleware extends MiddlewareBase
         $action_definition = $this->router->getMatchedActionDefinition();
 
         if (count($action_definition->getIncludableFieldList()) > 0) {
-            $include_string = $this->request->getQuery('include');
+            $include_string = $this->request->query->get('include');
             if ($include_string !== null) {
                 $include_list = LINQ::from(explode(',', $include_string))
                     ->select(function ($include_name) {

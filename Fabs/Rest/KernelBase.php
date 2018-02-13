@@ -133,7 +133,6 @@ abstract class KernelBase extends InjectableWithDefinition
 
         $this->initialize();
 
-        $this->request->initialize();
         $this->router->initialize();
 
         $this->execute();

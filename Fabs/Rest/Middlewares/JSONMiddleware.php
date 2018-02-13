@@ -22,7 +22,7 @@ class JSONMiddleware extends MiddlewareBase
             $this->request->isMethod(HttpMethods::PATCH);
 
         if ($is_data_required) {
-            $content_type = $this->request->getHeader(Headers::CONTENT_TYPE);
+            $content_type = $this->request->headers->get(Headers::CONTENT_TYPE);
             if ($content_type !== 'application/json') {
                 throw new UnsupportedMediaTypeException([
                     Headers::CONTENT_TYPE => $content_type,
@@ -30,7 +30,7 @@ class JSONMiddleware extends MiddlewareBase
                 ]);
             }
 
-            $data = $this->request->getArrayBody();
+            $data = $this->request->getContentAsArray();
             if (count($data) === 0) {
                 if (json_last_error() !== JSON_ERROR_NONE) {
                     throw  new BadRequestException();
@@ -60,7 +60,6 @@ class JSONMiddleware extends MiddlewareBase
     public function finalize()
     {
         if ($this->response->isSent() === false) {
-            $this->response->setHeader(Headers::CONTENT_TYPE, 'application/json');
             $this->response->send();
         }
     }

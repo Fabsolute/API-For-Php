@@ -12,7 +12,9 @@ class FactoryDefault extends DI
     public function __construct()
     {
         $this->setShared('router', Router::class);
-        $this->setShared('request', Request::class);
+        $this->setShared('request', function () {
+            return Request::createFromGlobals();
+        });
         $this->setShared('response', Response::class);
     }
 }
