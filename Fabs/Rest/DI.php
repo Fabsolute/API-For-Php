@@ -5,8 +5,9 @@ namespace Fabs\Rest;
 
 
 use Fabs\Rest\Definitions\ServiceDefinition;
+use Psr\Container\ContainerInterface;
 
-class DI implements \ArrayAccess
+class DI implements \ArrayAccess, ContainerInterface
 {
     /** @var DI */
     private static $default_dependency_injector = null;

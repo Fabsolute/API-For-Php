@@ -3,6 +3,7 @@
 
 namespace Fabs\Rest\Http;
 
+use Fabs\Rest\Exceptions\StatusCodeException\BadRequestException;
 use Fabs\Rest\Models\Search\SearchQueryModel;
 use Fabs\Serialize\SerializableObject;
 use \Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -72,6 +73,10 @@ class Request extends SymfonyRequest
 
     public function getContentWithType($type)
     {
-        return SerializableObject::create($this->getContentAsArray(), $type);
+        $content = $this->getContentAsArray();
+        if ($content === null) {
+            throw new BadRequestException();
+        }
+        return SerializableObject::create($content, $type);
     }
 }
