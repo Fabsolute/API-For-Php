@@ -79,4 +79,14 @@ class Request extends SymfonyRequest
         }
         return SerializableObject::create($content, $type);
     }
+
+    public function getClientIp($only_first_ip = true)
+    {
+        $ip = parent::getClientIp();
+        if (!$only_first_ip) {
+            return $ip;
+        }
+
+        return explode(',', $ip)[0];
+    }
 }
