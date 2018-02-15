@@ -4,6 +4,7 @@
 namespace Fabs\Rest;
 
 
+use Fabs\DI\DI;
 use Fabs\Rest\Definitions\APIDefinition;
 
 abstract class ModuleBase extends InjectableWithDefinition

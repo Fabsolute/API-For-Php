@@ -3,6 +3,7 @@
 
 namespace Fabs\Rest;
 
+use Fabs\DI\DI;
 use Fabs\Rest\Constants\HttpMethods;
 use Fabs\Rest\Constants\KernelTypes;
 use Fabs\Rest\Definitions\KernelDefinition;
