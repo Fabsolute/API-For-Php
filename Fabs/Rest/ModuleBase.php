@@ -4,7 +4,7 @@
 namespace Fabs\Rest;
 
 
-use Fabs\DI\DI;
+use Fabs\DI\Container;
 use Fabs\Rest\Definitions\APIDefinition;
 
 abstract class ModuleBase extends InjectableWithDefinition
@@ -36,7 +36,7 @@ abstract class ModuleBase extends InjectableWithDefinition
     }
 
     /**
-     * @param $dependency_injector DI
+     * @param $container Container
      */
-    public abstract function initialize($dependency_injector);
+    public abstract function initialize($container);
 }

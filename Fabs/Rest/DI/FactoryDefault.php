@@ -2,12 +2,12 @@
 
 namespace Fabs\Rest\DI;
 
-use Fabs\DI\DI;
+use Fabs\DI\Container;
 use Fabs\Rest\Http\Request;
 use Fabs\Rest\Http\Response;
 use Fabs\Rest\Router;
 
-class FactoryDefault extends DI
+class FactoryDefault extends Container
 {
     public function __construct()
     {

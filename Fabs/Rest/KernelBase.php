@@ -3,7 +3,7 @@
 
 namespace Fabs\Rest;
 
-use Fabs\DI\DI;
+use Fabs\DI\Container;
 use Fabs\Rest\Constants\HttpMethods;
 use Fabs\Rest\Constants\KernelTypes;
 use Fabs\Rest\Definitions\KernelDefinition;
@@ -25,16 +25,15 @@ abstract class KernelBase extends InjectableWithDefinition
 
     /**
      * Application constructor.
-     * @param DI $dependency_injector
+     * @param Container $container
      */
-    public function __construct($dependency_injector = null)
+    public function __construct($container = null)
     {
-        if ($dependency_injector === null) {
-            $dependency_injector = new FactoryDefault();
-            DI::setDefault($dependency_injector);
+        if ($container === null) {
+            $container = new FactoryDefault();
         }
 
-        $dependency_injector->setShared('kernel', $this);
+        $container->setShared('kernel', $this);
     }
 
     /**
