@@ -28,9 +28,10 @@ abstract class ModuleBase extends InjectableWithDefinition
      */
     protected function defineAPI($route, $definition)
     {
-        $api_definition = new APIDefinition();
+        /** @var APIDefinition $api_definition */
+        $api_definition = $this->getContainer()->createInstance(APIDefinition::class);
         $api_definition->route = $route;
-        $api_definition->setDefinition( $definition);
+        $api_definition->setDefinition($definition);
         $this->api_definition_list[] = $api_definition;
         return $api_definition;
     }

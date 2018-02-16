@@ -23,6 +23,8 @@ abstract class APIBase extends InjectableWithDefinition
         $action_definition->route = $route;
         $action_definition->setDefinition($definition);
         $this->action_definition_list[] = $action_definition;
+
+        $action_definition->setContainer($this->getContainer());
         return $action_definition;
     }
 

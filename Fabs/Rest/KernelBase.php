@@ -44,7 +44,8 @@ abstract class KernelBase extends InjectableWithDefinition
      */
     protected function defineModule($route, $definition)
     {
-        $module_definition = new ModuleDefinition();
+        /** @var ModuleDefinition $module_definition */
+        $module_definition = $this->getContainer()->createInstance(ModuleDefinition::class);
         $module_definition->route = $route;
         $module_definition->setDefinition($definition);
         $this->module_definition_list[] = $module_definition;
@@ -69,7 +70,7 @@ abstract class KernelBase extends InjectableWithDefinition
         /** @var KernelDefinition $definition */
         $definition = parent::getDefinition();
         if ($definition === null) {
-            $definition = new KernelDefinition();
+            $definition = $this->getContainer()->createInstance(KernelDefinition::class);
             $definition->type = KernelTypes::WEB;
             $definition->setDefinition(static::class);
             $definition->setInstance($this);
@@ -102,15 +103,15 @@ abstract class KernelBase extends InjectableWithDefinition
             foreach ($this->exception_handler_list as $exception_class => $handler_class) {
                 if ($exception instanceof $exception_class) {
                     /** @var ExceptionHandlerBase $handler */
-                    $handler = new $handler_class();
+                    $handler = $this->getContainer()->createInstance(ExceptionHandlerBase::class);
                     $handler->handle($exception);
                     return;
                 }
             }
         } catch (\Exception $sub_exception) {
             if ($this->exception_depth < static::$MAXIMUM_EXCEPTION_DEPTH) {
-                $this->handleException($sub_exception);
                 $this->exception_depth++;
+                $this->handleException($sub_exception);
                 return;
             }
             $exception = $sub_exception;

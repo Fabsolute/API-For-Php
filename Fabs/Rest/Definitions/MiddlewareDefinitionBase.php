@@ -3,6 +3,7 @@
 
 namespace Fabs\Rest\Definitions;
 
+use Fabs\DI\Container;
 use Fabs\Rest\MiddlewareBase;
 
 abstract class MiddlewareDefinitionBase extends DefinitionBase
@@ -61,7 +62,9 @@ abstract class MiddlewareDefinitionBase extends DefinitionBase
             foreach ($this->middleware_definition_list as $middleware_definition) {
                 $middleware_name = $middleware_definition['middleware'];
                 $middleware_parameters = $middleware_definition['parameters'];
+                /** @var MiddlewareBase $instance */
                 $instance = new $middleware_name(...$middleware_parameters);
+                $instance->setContainer($this->getContainer());
                 $this->middleware_instance_list[] = $instance;
             }
         }

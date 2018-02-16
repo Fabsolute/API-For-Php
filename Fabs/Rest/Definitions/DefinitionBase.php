@@ -4,9 +4,9 @@
 namespace Fabs\Rest\Definitions;
 
 
-use Fabs\Rest\InjectableWithDefinition;
+use Fabs\Rest\Injectable;
 
-abstract class DefinitionBase
+abstract class DefinitionBase extends Injectable
 {
     /** @var mixed */
     private $instance = null;
@@ -20,17 +20,7 @@ abstract class DefinitionBase
     public function getInstance()
     {
         if ($this->instance === null) {
-
-            if (is_callable($this->getDefinition())) {
-                $instance = call_user_func($this->getDefinition());
-            } else {
-                $definition = $this->getDefinition();
-                $instance = new $definition;
-            }
-
-            if ($instance instanceof InjectableWithDefinition) {
-                $instance->setDefinition($this);
-            }
+            $instance = $this->getContainer()->createInstance($this->getDefinition());
 
             $this->setInstance($instance);
         }
