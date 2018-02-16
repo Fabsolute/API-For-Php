@@ -31,6 +31,7 @@ abstract class KernelBase extends InjectableWithDefinition
     {
         if ($container === null) {
             $container = new FactoryDefault();
+            $this->setContainer($container);
         }
 
         $container->setShared('kernel', $this);
