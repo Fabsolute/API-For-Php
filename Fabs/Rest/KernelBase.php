@@ -104,7 +104,7 @@ abstract class KernelBase extends InjectableWithDefinition
             foreach ($this->exception_handler_list as $exception_class => $handler_class) {
                 if ($exception instanceof $exception_class) {
                     /** @var ExceptionHandlerBase $handler */
-                    $handler = $this->getContainer()->createInstance(ExceptionHandlerBase::class);
+                    $handler = $this->getContainer()->createInstance($handler_class);
                     $handler->handle($exception);
                     return;
                 }
