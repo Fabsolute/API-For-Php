@@ -42,7 +42,7 @@ class ActionDefinition extends MiddlewareDefinitionBase
      */
     private function compile()
     {
-        $this->compiled_route = preg_replace('/\{\w+\}/', '([a-zA-Z0-9\_]+)', $this->route);;
+        $this->compiled_route = preg_replace('/\{\w+\}/', '([\w\-]+)', $this->route);;
     }
 
     /**
